@@ -12,7 +12,7 @@ body {
   line-height: 140%;
 }
 
-/* Styles for index */
+/* Styles for index page */
 .background-antiquewhite {
   background-color: antiquewhite;
 }
@@ -28,8 +28,7 @@ h2 {
 }
 
 main {
-  /* text-align: center; */
-  padding: 80px;
+  padding: 80px 80px 40px;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -37,7 +36,6 @@ main {
 /* table styles */
 table {
   border-collapse: collapse;
-  /* margin: 0 auto; */
   width: 100%;
 }
 
@@ -61,25 +59,47 @@ td {
   padding: 1rem;
 }
 
+/* Back button */
+nav {
+  padding: 1rem;
+  float: left;
+}
+
+/* Styles for code examples */
 /* pre code {
   display: block;
 } */
+pre {
+  white-space: pre-wrap;
+}
 
-code {
+code.block {
+  box-sizing: border-box;
   display: block;
   font-size: 120%;
   padding: 20px;
   margin: 1rem 0;
   background-color: #eee;
-  /* border-left: 3px solid black; */
   border: 1px solid black;
   width: 100%;
+}
+
+code {
+  display: inline;
 }
 
 .color-red {
   color: red;
 }
 
+/* Screenshot styles */
+figure {
+  margin: 0 auto;
+  max-width: 1000px;
+  background-color: black;
+}
+
 img {
+  display: block;
   width: 100%;
 }
