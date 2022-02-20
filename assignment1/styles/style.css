@@ -76,7 +76,6 @@ pre {
 code.block {
   box-sizing: border-box;
   display: block;
-  font-size: 120%;
   padding: 20px;
   margin: 1rem 0;
   background-color: #eee;
@@ -85,6 +84,7 @@ code.block {
 }
 
 code {
+  font-size: 120%;
   display: inline;
 }
 
