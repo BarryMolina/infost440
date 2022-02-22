@@ -17,19 +17,25 @@
 	<nav><a href="./index.php">&lt; Back</a></nav>
 	<main>
 		<h2>Constants</h2>
+		<!-- Constants intro text -->
 		<p>Constants are variables that cannot be changed once they are defined</p>
 		<p>Unlike normal variables, constants are global in scope and don't use the dollar sign</p>
+		<!-- Code example using the <pre> tag to preserve formatting -->
 		<pre><code class="block">define('APPLES', 2056);
 define('APPLE_PICKERS', 8);
 
 echo 'There are ' . APPLES . ' apples and ' . APPLE_PICKERS . ' people to pick them.';
 echo 'That\'s ' . APPLES / APPLE_PICKERS . ' apples per person.';</code></pre>
 		<p>Output:</p>
+		<!-- PHP code run on server -->
 		<?php
+		// Define two constants
 		define('APPLES', 2056);
 		define('APPLE_PICKERS', 8);
+		// Echo out constants
 		echo 'There are ' . APPLES . ' apples and ' . APPLE_PICKERS . ' people to pick them.';
 		echo '<br>';
+		// Calculate number of apples per apple picker
 		echo 'That\'s ' . APPLES / APPLE_PICKERS . ' apples per person.';
 		?>
 

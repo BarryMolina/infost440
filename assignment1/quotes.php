@@ -17,8 +17,10 @@
 	<nav><a href="./index.php">&lt; Back</a></nav>
 	<main>
 		<h2>Quotes</h2>
+		<!-- Quotes examples start -->
 		<p>In PHP, both double quotes and single quotes can be used to store strings.</p>
 		<p>Single quotes will interpret their contents literally:</p>
+		<!-- Example code blocks -->
 		<code class="block">
 			$my_var = 'fun'; <br>
 			echo 'PHP is $my_var';
@@ -36,7 +38,9 @@
 		</code>
 		<p>Output:
 			<?php
+			// PHP example of how double quotes can be used to interpret variables
 			$my_var = 'fun';
+			// This will output the string 'PHP is fun' 
 			echo "PHP is $my_var";
 			?>
 		</p>

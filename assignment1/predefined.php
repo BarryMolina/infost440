@@ -19,6 +19,7 @@
 		<h2>Predefined</h2>
 		<p>Predefined variables contain information about the server's operating environment.</p>
 		<p>They can be accessed by typing <code>$_SERVER</code> followed by the variable name:</p>
+		<!-- use the <pre> tag to preserve whitespace and formatting -->
 		<pre><code class="block">$server_addr = $_SERVER['SERVER_ADDR'];
 $server_name = $_SERVER['SERVER_NAME'];
 $remote_addr = $_SERVER['REMOTE_ADDR'];
@@ -28,9 +29,11 @@ echo "The server's IP address is $server_addr";
 echo "Your IP address is $remote_addr";</code></pre>
 		<p>Output:</p>
 		<?php
+		// Store values in new variables
 		$server_addr = $_SERVER['SERVER_ADDR'];
 		$server_name = $_SERVER['SERVER_NAME'];
 		$remote_addr = $_SERVER['REMOTE_ADDR'];
+		// Output server variables. The new variables allow double quotes to be used.
 		echo "The server's host name is $server_name";
 		echo '<br>';
 		echo "The server's IP address is $server_addr";

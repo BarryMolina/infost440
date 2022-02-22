@@ -10,19 +10,23 @@
 </head>
 
 <body class="background-antiquewhite">
+	<!-- Header is present on all pages -->
 	<header>
 		<h1>Assignment 1</h1>
 		<h3>Barry Molina</h3>
 	</header>
 	<main>
 		<h2>Pages</h2>
+		<!-- HTML table containing navigation links -->
 		<table>
+			<!-- Table header -->
 			<thead>
 				<tr>
 					<th>Page</th>
 					<th>Link</th>
 				</tr>
 			</thead>
+			<!-- Table body -->
 			<tbody>
 				<tr>
 					<td>PHP Info</td>

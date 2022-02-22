@@ -18,21 +18,47 @@
 	<main>
 		<h2>Math</h2>
 		<p>PHP can be used to perform common math operations.</p>
+		<!-- PHP math examples for addition, subtraction, multiplication, division, and modulo -->
 		<p>Addition uses the <code>+</code> operator</p>
 		<code class="block">echo 5 + 6;</code>
-		<p>Output: <?php echo 5 + 6; ?></p>
+		<p>Output:
+			<?php
+			// Addition example
+			echo 5 + 6;
+			?>
+		</p>
 		<p>Subtraction uses the <code>-</code> operator</p>
 		<code class="block">echo 76 - 6;</code>
-		<p>Output: <?php echo 76 - 6; ?></p>
+		<p>Output:
+			<?php
+			// Subtraction example
+			echo 76 - 6;
+			?>
+		</p>
 		<p>Multiplication uses the <code>*</code> operator</p>
 		<code class="block">echo 7 * 8;</code>
-		<p>Output: <?php echo 7 * 8; ?></p>
+		<p>Output:
+			<?php
+			// Multiplication example
+			echo 7 * 8;
+			?>
+		</p>
 		<p>Division uses the <code>/</code> operator</p>
 		<code class="block">echo 25 / 5;</code>
-		<p>Output: <?php echo 25 / 5; ?></p>
+		<p>Output:
+			<?php
+			// Division example
+			echo 25 / 5;
+			?>
+		</p>
 		<p>The modulo operator <code>%</code> finds the integer division remainder</p>
 		<code class="block">echo 17 % 3;</code>
-		<p>Output: <?php echo 17 % 3; ?></p>
+		<p>Output:
+			<?php
+			// Modulo example
+			echo 17 % 3;
+			?>
+		</p>
 	</main>
 	<figure>
 		<img src="./images/math.png" alt="math.php source code screenshot" />
