@@ -6,7 +6,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./styles/style.css">
-	<title>Functions</title>
+	<title>
+		<?php
+		$title = 'Assignment 1: Functions';
+		echo $title;
+		?>
+	</title>
 </head>
 
 <body class="background-antiquewhite">
@@ -18,9 +23,9 @@
 	<main>
 		<!-- Functions intro -->
 		<h2>Functions</h2>
-		<p>Functions are reusable chunks of code that can take input and produce output</p>
-		<p>They allow you to tackle complex problems using functional decomposition</p>
-		<p>PHP has many built-in functions. For example, <code>str_repeat()</code>repeats a string a certain number of times</p>
+		<p>Functions are reusable chunks of code that can take input and produce output.</p>
+		<p>They allow you to tackle complex problems using functional decomposition.</p>
+		<p>PHP has many built-in functions. For example, <code>str_repeat()</code>repeats a string a certain number of times.</p>
 		<!-- Code example of using a built-in function -->
 		<pre><code class="block">$laugh = 'ha';
 $funny = str_repeat($laugh, 2);
@@ -63,7 +68,7 @@ make_me_laugh();</code></pre>
 			echo '<br><br>';
 			echo 'A stick.';
 		}
-		// Call make_me_laugh function
+		// Demonstration of user-defined function
 		make_me_laugh();
 		?>
 	</main>

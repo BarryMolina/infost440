@@ -6,7 +6,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./styles/style.css">
-	<title>Quotes</title>
+	<title>
+		<?php
+		$title = 'Assignment 1: Quotes';
+		echo $title;
+		?>
+	</title>
 </head>
 
 <body class="background-antiquewhite">
@@ -27,6 +32,7 @@
 		</code>
 		<p>Output:
 			<?php
+			// Example of how single quotes interpret variables literally
 			$my_var = 'fun';
 			echo 'PHP is $my_var'
 			?>
@@ -38,7 +44,7 @@
 		</code>
 		<p>Output:
 			<?php
-			// PHP example of how double quotes can be used to interpret variables
+			// Example of how double quotes convert variables to the values they contain
 			$my_var = 'fun';
 			// This will output the string 'PHP is fun' 
 			echo "PHP is $my_var";
@@ -47,6 +53,9 @@
 	</main>
 	<figure>
 		<img src="./images/quotes.png" alt="quotes.php source code screenshot" />
+	</figure>
+	<figure>
+		<img src="./images/quotes2.png" alt="quotes.php source code screenshot 2" />
 	</figure>
 </body>
 

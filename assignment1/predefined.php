@@ -6,7 +6,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./styles/style.css">
-	<title>Predefined</title>
+	<title>
+		<?php
+		$title = 'Assignment 1: Predefined';
+		echo $title;
+		?>
+	</title>
 </head>
 
 <body class="background-antiquewhite">
@@ -29,7 +34,7 @@ echo "The server's IP address is $server_addr";
 echo "Your IP address is $remote_addr";</code></pre>
 		<p>Output:</p>
 		<?php
-		// Store values in new variables
+		// Store values of $_SERVER predefined variables 
 		$server_addr = $_SERVER['SERVER_ADDR'];
 		$server_name = $_SERVER['SERVER_NAME'];
 		$remote_addr = $_SERVER['REMOTE_ADDR'];

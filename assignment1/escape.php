@@ -6,7 +6,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./styles/style.css">
-	<title>Escape</title>
+	<title>
+		<?php
+		$title = 'Assignment 1: Escape';
+		echo $title;
+		?>
+	</title>
 </head>
 
 <body class="background-antiquewhite">
@@ -28,7 +33,7 @@
 		<p>Result:</p>
 		<!-- Actual PHP code run on server -->
 		<?php
-		// This is run on the server
+		// PHP escape slash code example
 		echo 'This is Barry\'s single quoted string';
 		?>
 	</main>

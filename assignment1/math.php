@@ -6,7 +6,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./styles/style.css">
-	<title>Math</title>
+	<title>
+		<?php
+		$title = 'Assignment 1: Math';
+		echo $title;
+		?>
+	</title>
 </head>
 
 <body class="background-antiquewhite">
