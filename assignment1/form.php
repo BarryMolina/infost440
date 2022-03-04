@@ -70,9 +70,7 @@
 					Please leave any additional comments below
 				</label><br><br>
 				<!-- Textarea -->
-				<textarea id="textarea-comments" name="comments" rows="10" cols="60">
-					What an amazing experience. I had so much fun.
-				</textarea><br><br>
+				<textarea id="textarea-comments" name="comments" rows="10" cols="60">What an amazing experience. I had so much fun.</textarea><br><br>
 				<!-- Submit button -->
 				<input type="submit" value="Submit">
 			</fieldset>
