@@ -1,0 +1,25 @@
+body {
+	background-color: #1C5253;
+	color: white;
+}
+main {
+	max-width: 800px;
+	margin: 50px auto;
+}
+
+.temp-license {
+	min-height: 100px;
+	max-width: 500px;
+	margin: 50px auto;
+}
+/* .btn-primary{
+	color: black;
+	background-color: #C3EB78;
+	border-color: #C3EB78;
+}
+
+.btn-primary:hover {
+	color: black;
+	background-color: #C3EB78;
+	border-color: #C3EB78;
+} */
