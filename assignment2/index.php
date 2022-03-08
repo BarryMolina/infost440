@@ -32,16 +32,17 @@
 				);
 
 				$class_fields = array(
-					'class-A' => false,
-					'class-B' => false,
-					'class-C' => false,
-					'class-D' => false,
-					'class-M' => false,
+					'class-A' => array('checked' => false, 'value' => 'A'),
+					'class-B' => array('checked' => false, 'value' => 'B'),
+					'class-C' => array('checked' => false, 'value' => 'C'),
+					'class-D' => array('checked' => false, 'value' => 'D'),
+					'class-M' => array('checked' => false, 'value' => 'M'),
+
 				);
 
-				$all_valid = true;
 
 				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+					$all_valid = true;
 
 					// Populate variable values from POST data if it exists
 					// Else, display error message
@@ -60,9 +61,9 @@
 					// Initialize license class fields. Ensure at least one class is selected
 					$at_least_one = false;
 
-					foreach ($class_fields as $field => $default_value) {
+					foreach ($class_fields as $field => $attrs) {
 						if (isset($_POST[$field])) {
-							$class_fields[$field] = true;
+							$class_fields[$field]['checked'] = true;
 							$at_least_one = true;
 						}
 					}
@@ -95,11 +96,11 @@
 				$instructions = $fields['instructions']['value'];
 
 				// License classes will have value of true or false
-				$class_A = $class_fields['class-A'];
-				$class_B = $class_fields['class-B'];
-				$class_C = $class_fields['class-C'];
-				$class_D = $class_fields['class-D'];
-				$class_M = $class_fields['class-M'];
+				$class_A = $class_fields['class-A']['checked'];
+				$class_B = $class_fields['class-B']['checked'];
+				$class_C = $class_fields['class-C']['checked'];
+				$class_D = $class_fields['class-D']['checked'];
+				$class_M = $class_fields['class-M']['checked'];
 
 				// Arrays for DOB
 				$days_array = array_merge(array('Day'), range(1, 31));
@@ -108,7 +109,7 @@
 				?>
 				<!-- First name, last name, address -->
 				<fieldset class="row gx-3 gy-4">
-					<legend>Drivers License Application Form</legend>
+					<legend>Driver License Application Form</legend>
 					<div class="col-md-6">
 						<label for="first-name" class="form-label">First Name</label>
 						<input type="text" name="first-name" class="form-control" id="first-name" value="<?php echo $first_name ?>">
@@ -127,15 +128,15 @@
 					</div>
 					<div class="col-md-5">
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="sex" id="sex-male" value="male" <?php echo ($sex == 'male' ? 'checked' : '') ?>>
+							<input class="form-check-input" type="radio" name="sex" id="sex-male" value="M" <?php echo ($sex == 'M' ? 'checked' : '') ?>>
 							<label class="form-check-label" for="sex-male">Male</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="sex" id="sex-female" value="female" <?php echo ($sex == 'female' ? 'checked' : '') ?>>
+							<input class="form-check-input" type="radio" name="sex" id="sex-female" value="F" <?php echo ($sex == 'F' ? 'checked' : '') ?>>
 							<label class="form-check-label" for="sex-female">Female</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="sex" id="sex-other" value="other" <?php echo ($sex == 'other' ? 'checked' : '') ?>>
+							<input class="form-check-input" type="radio" name="sex" id="sex-other" value="Other" <?php echo ($sex == 'Other' ? 'checked' : '') ?>>
 							<label class="form-check-label" for="sex-other">Other</label>
 						</div>
 					</div>
@@ -200,23 +201,23 @@
 					<!-- Checkboxes for license class -->
 					<div class="col-md-5">
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" name="class-A" id="class-A" value="true" <?php echo ($class_A ? 'checked' : '') ?>>
+							<input class="form-check-input" type="checkbox" name="class-A" id="class-A" <?php echo ($class_A ? 'checked' : '') ?>>
 							<label class="form-check-label" for="class-A">A</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" name="class-B" id="class-B" value="true" <?php echo ($class_B ? 'checked' : '') ?>>
+							<input class="form-check-input" type="checkbox" name="class-B" id="class-B" <?php echo ($class_B ? 'checked' : '') ?>>
 							<label class="form-check-label" for="class-B">B</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" name="class-C" id="class-C" value="true" <?php echo ($class_C ? 'checked' : '') ?>>
+							<input class="form-check-input" type="checkbox" name="class-C" id="class-C" <?php echo ($class_C ? 'checked' : '') ?>>
 							<label class="form-check-label" for="class-C">C</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" name="class-D" id="class-D" value="true" <?php echo ($class_D ? 'checked' : '') ?>>
+							<input class="form-check-input" type="checkbox" name="class-D" id="class-D" <?php echo ($class_D ? 'checked' : '') ?>>
 							<label class="form-check-label" for="class-D">D</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" name="class-M" id="class-M" value="true" <?php echo ($class_M ? 'checked' : '') ?>>
+							<input class="form-check-input" type="checkbox" name="class-M" id="class-M" <?php echo ($class_M ? 'checked' : '') ?>>
 							<label class="form-check-label" for="class-M">M</label>
 						</div>
 					</div>
@@ -248,29 +249,62 @@
 			<?php
 			if ($all_valid) {
 			}
+			// Create one-dimensional array containing only license class values. 
+			// etc. ['A', 'B', 'C',]
+			$classes = array_reduce($class_fields, function ($selected, $license_class) {
+				if ($license_class['checked']) {
+					$selected[] = $license_class['value'];
+				}
+				return $selected;
+			}, array());
+			// Join classes array into string
+			$class_str = implode(' ', $classes);
+
+			// Get month number
+			$month_num = array_search($dob_month, $months_array);
+			// Create DOB string from dropdown values
+			$dob = "$month_num/$dob_day/$dob_year";
+
+			// Get today's date
+			$issued = date("n/j/Y");
 			?>
-			<div class="temp-license border row gx-4 gy-3 px-2">
-				<div class="col-12">
-					Drivers License
+			<div class="row <?php echo ($all_valid ? '' : 'd-none') ?>">
+				<div class="col-12 py-4">
+					Success! Here is your new driver's license:
 				</div>
-				<div class="col-3">
+			</div>
+			<div class="temp-license border shadow row gx-4 gy-3 px-2 pb-3 mx-auto my-4 <?php echo ($all_valid ? '' : 'd-none') ?>">
+				<h3 class="col-12">
+					Driver License
+				</h3>
+				<div class="col-4">
 					<img src="./images/default-head.jpeg" class="img-fluid">
 
 				</div>
-				<div class="col-5">
+				<div class="col-8">
 					<div class="row">
-						<div class="col-12"><?php echo $last_name ?></div>
-						<div class="col-12"><?php echo $first_name ?></div>
-						<div class="col-12 my-3"><?php echo $address ?></div>
-						<div class="col-12 mt-4">sex <?php echo $sex ?></div>
+						<div class="col-6"> <?php echo $last_name ?></div>
+						<div class="col-6"><small>class</small> <?php echo $class_str ?></div>
+						<div class="col-12"> <?php echo $first_name ?></div>
+						<div class="col-12 mt-3 mb-4"><?php echo $address ?></div>
+						<div class="col-2"><small>sex</small></div>
+						<div class="col-4"><?php echo $sex ?></div>
+						<div class="col-2"><small>height</small></div>
+						<div class="col-4"><?php echo $height ?></div>
+						<div class="col-2"><small>weight</small></div>
+						<div class="col-4"><?php echo $weight ?></div>
+						<div class="col-2"><small>eyes</small></div>
+						<div class="col-4"><?php echo $eye_color ?></div>
+						<div class="col-2"><small>hair</small></div>
+						<div class="col-4"><?php echo $hair_color ?></div>
+						<div class="col-2"><small>donor</small></div>
+						<div class="col-4"><?php echo $donor ?></div>
+						<div class="col-2"><small>DOB</small></div>
+						<div class="col-4"><?php echo $dob ?></div>
+						<div class="col-2"><small>issued</small></div>
+						<div class="col-4"><?php echo $issued ?></div>
 					</div>
 				</div>
-				<div class="col-4">
-					<div class="row">
-						<div class="col-12">class <?php echo "A B C D M" ?></div>
-					</div>
-				</div>
-
 			</div>
 		</div>
 	</main>

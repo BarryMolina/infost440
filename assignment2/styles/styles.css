@@ -10,7 +10,14 @@ main {
 .temp-license {
 	min-height: 100px;
 	max-width: 500px;
-	margin: 50px auto;
+	/* margin: 0 auto 50px; */
+	background-color: white;
+	color: black;
+	border-radius: 10px;
+}
+
+small {
+	/* font-size: small; */
 }
 /* .btn-primary{
 	color: black;
