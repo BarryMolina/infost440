@@ -1,3 +1,4 @@
+/* General page styles. most styling done with Bootstrap */
 body {
 	background-color: #1C5253;
 	color: white;
@@ -7,26 +8,11 @@ main {
 	margin: 50px auto;
 }
 
+/* Styles for rendered license */
 .temp-license {
 	min-height: 100px;
 	max-width: 500px;
-	/* margin: 0 auto 50px; */
 	background-color: white;
 	color: black;
 	border-radius: 10px;
 }
-
-small {
-	/* font-size: small; */
-}
-/* .btn-primary{
-	color: black;
-	background-color: #C3EB78;
-	border-color: #C3EB78;
-}
-
-.btn-primary:hover {
-	color: black;
-	background-color: #C3EB78;
-	border-color: #C3EB78;
-} */

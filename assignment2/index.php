@@ -73,6 +73,12 @@
 						echo "</div>";
 					}
 
+					echo "test";
+					echo $_SESSION['captcha_text'];
+					print_r($_SESSION);
+					if (isset($_POST['captcha_challenge']) && $_POST['captcha_challenge'] == $_SESSION['captcha_text']) {
+					}
+
 					if ($all_valid) {
 						echo '<div class="alert alert-success" role="alert">';
 						echo 'Application submitted successfully';
@@ -140,10 +146,10 @@
 							<label class="form-check-label" for="sex-other">Other</label>
 						</div>
 					</div>
+					<!-- Date dropdowns -->
 					<div class="col-md-1">
 						DOB:
 					</div>
-					<!-- Date dropdowns -->
 					<div class="col-md-5">
 						<div class="row gx-1">
 							<div class="col">
@@ -195,10 +201,10 @@
 						<label for="hair-color" class="form-label">Hair Color</label>
 						<input type="text" name="hair-color" class="form-control" id="hair-color" value="<?php echo $hair_color ?>">
 					</div>
+					<!-- Checkboxes for license class -->
 					<div class="col-md-1">
 						Class:
 					</div>
-					<!-- Checkboxes for license class -->
 					<div class="col-md-5">
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="checkbox" name="class-A" id="class-A" <?php echo ($class_A ? 'checked' : '') ?>>
@@ -221,10 +227,10 @@
 							<label class="form-check-label" for="class-M">M</label>
 						</div>
 					</div>
+					<!-- Donor radiobuttons -->
 					<div class="col-md-1">
 						Donor:
 					</div>
-					<!-- Donor radiobuttons -->
 					<div class="col-md-5">
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="radio" name="donor" id="donor-yes" value="yes" <?php echo ($donor == 'yes' ? 'checked' : '') ?>>
@@ -240,7 +246,13 @@
 						<label class="form-label" for="instructions">Processing Instructions</label>
 						<textarea class="form-control" id="instructions" name="instructions" rows="5"><?php echo $instructions ?></textarea>
 					</div>
-					<!-- Submit button -->
+					<div class="col-4">
+						<!-- CAPTCHA -->
+						<label class="form-label" for="captcha">Please Enter the Captcha Text</label>
+						<img src="captcha.php" alt="CAPTCHA" class="captcha-image">
+						<input type="text" class="form-control mt-3" id="captcha" name="captcha-challenge">
+						<!-- Submit button -->
+					</div>
 					<div class="col-12">
 						<button type="submit" class="btn btn-outline-light">Submit</button>
 					</div>
@@ -268,41 +280,44 @@
 			// Get today's date
 			$issued = date("n/j/Y");
 			?>
-			<div class="row <?php echo ($all_valid ? '' : 'd-none') ?>">
-				<div class="col-12 py-4">
-					Success! Here is your new driver's license:
+			<!-- Show temp license only if all fields are filled out -->
+			<div class="<?php echo ($all_valid ? '' : 'd-none') ?>">
+				<div class="row">
+					<div class="col-12 py-4">
+						Success! Here is your new driver's license:
+					</div>
 				</div>
-			</div>
-			<div class="temp-license border shadow row gx-4 gy-3 px-2 pb-3 mx-auto my-4 <?php echo ($all_valid ? '' : 'd-none') ?>">
-				<h3 class="col-12">
-					Driver License
-				</h3>
-				<div class="col-4">
-					<img src="./images/default-head.jpeg" class="img-fluid">
+				<div class="temp-license border shadow row gx-4 gy-3 px-2 pb-3 mx-auto my-4">
+					<h3 class="col-12">
+						Driver License
+					</h3>
+					<div class="col-4">
+						<img src="./images/default-head.jpeg" class="img-fluid">
 
-				</div>
-				<div class="col-8">
-					<div class="row">
-						<div class="col-6"> <?php echo $last_name ?></div>
-						<div class="col-6"><small>class</small> <?php echo $class_str ?></div>
-						<div class="col-12"> <?php echo $first_name ?></div>
-						<div class="col-12 mt-3 mb-4"><?php echo $address ?></div>
-						<div class="col-2"><small>sex</small></div>
-						<div class="col-4"><?php echo $sex ?></div>
-						<div class="col-2"><small>height</small></div>
-						<div class="col-4"><?php echo $height ?></div>
-						<div class="col-2"><small>weight</small></div>
-						<div class="col-4"><?php echo $weight ?></div>
-						<div class="col-2"><small>eyes</small></div>
-						<div class="col-4"><?php echo $eye_color ?></div>
-						<div class="col-2"><small>hair</small></div>
-						<div class="col-4"><?php echo $hair_color ?></div>
-						<div class="col-2"><small>donor</small></div>
-						<div class="col-4"><?php echo $donor ?></div>
-						<div class="col-2"><small>DOB</small></div>
-						<div class="col-4"><?php echo $dob ?></div>
-						<div class="col-2"><small>issued</small></div>
-						<div class="col-4"><?php echo $issued ?></div>
+					</div>
+					<div class="col-8">
+						<div class="row">
+							<div class="col-6"> <?php echo $last_name ?></div>
+							<div class="col-6"><small>class</small> <?php echo $class_str ?></div>
+							<div class="col-12"> <?php echo $first_name ?></div>
+							<div class="col-12 mt-3 mb-4"><?php echo $address ?></div>
+							<div class="col-2"><small>sex</small></div>
+							<div class="col-4"><?php echo $sex ?></div>
+							<div class="col-2"><small>height</small></div>
+							<div class="col-4"><?php echo $height ?></div>
+							<div class="col-2"><small>weight</small></div>
+							<div class="col-4"><?php echo $weight ?></div>
+							<div class="col-2"><small>eyes</small></div>
+							<div class="col-4"><?php echo $eye_color ?></div>
+							<div class="col-2"><small>hair</small></div>
+							<div class="col-4"><?php echo $hair_color ?></div>
+							<div class="col-2"><small>donor</small></div>
+							<div class="col-4"><?php echo $donor ?></div>
+							<div class="col-2"><small>DOB</small></div>
+							<div class="col-4"><?php echo $dob ?></div>
+							<div class="col-2"><small>issued</small></div>
+							<div class="col-4"><?php echo $issued ?></div>
+						</div>
 					</div>
 				</div>
 			</div>
