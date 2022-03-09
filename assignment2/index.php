@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,6 +41,7 @@
 
 				);
 
+				$all_valid = false;
 
 				if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$all_valid = true;
@@ -68,15 +70,27 @@
 						}
 					}
 					if (!$at_least_one) {
+						$all_valid = false;
 						echo "<div class='alert alert-danger' role='alert'>";
 						echo "You must select at least one license class";
 						echo "</div>";
 					}
 
-					echo "test";
-					echo $_SESSION['captcha_text'];
-					print_r($_SESSION);
-					if (isset($_POST['captcha_challenge']) && $_POST['captcha_challenge'] == $_SESSION['captcha_text']) {
+					// Check if user filled out the captcha
+					$captcha_input = (isset($_POST['captcha-challenge']) ? $_POST['captcha-challenge'] : '');
+					if ($captcha_input) {
+						// Check if captcha is correct
+						if ($_POST['captcha-challenge'] != $_SESSION['captcha-text']) {
+							$all_valid = false;
+							echo "<div class='alert alert-danger' role='alert'>";
+							echo "CAPTCHA text is incorrect";
+							echo "</div>";
+						}
+					} else {
+						$all_valid = false;
+						echo "<div class='alert alert-danger' role='alert'>";
+						echo "You must fill out the CAPTCHA";
+						echo "</div>";
 					}
 
 					if ($all_valid) {
@@ -112,6 +126,12 @@
 				$days_array = array_merge(array('Day'), range(1, 31));
 				$months_array = array('Month', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 				$years_array = array_merge(array('Year'), range(2022, 1900, -1));
+
+				// Generate the captcha text
+				$captcha_string = include 'captchatext.php';
+				// Store in session
+				$_SESSION['captcha-text'] = $captcha_string;
+
 				?>
 				<!-- First name, last name, address -->
 				<fieldset class="row gx-3 gy-4">
@@ -248,9 +268,10 @@
 					</div>
 					<div class="col-4">
 						<!-- CAPTCHA -->
+						<!-- Create captcha image using generated string and display it -->
 						<label class="form-label" for="captcha">Please Enter the Captcha Text</label>
-						<img src="captcha.php" alt="CAPTCHA" class="captcha-image">
-						<input type="text" class="form-control mt-3" id="captcha" name="captcha-challenge">
+						<img src="<?php echo "captcha.php?text=$captcha_string" ?>" alt=" CAPTCHA" class="captcha-image">
+						<input type="text" class="form-control mt-3" id="captcha" name="captcha-challenge" autocomplete="off">
 						<!-- Submit button -->
 					</div>
 					<div class="col-12">

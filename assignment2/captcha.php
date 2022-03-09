@@ -1,21 +1,11 @@
 <?php
+// Create a CAPTCHA image given a "text" query parameter
+// Adapted form source: https://code.tutsplus.com/tutorials/build-your-own-captcha-and-contact-form-in-php--net-5362
 
-session_start();
+$captcha_string = $_GET['text'];
+$string_length = strlen($captcha_string);
 
-// Generate random string of characters
-$permitted_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-
-function generate_string($input, $strength = 10) {
-	$input_length = strlen($input);
-	$random_string = '';
-	for ($i = 0; $i < $strength; $i++) {
-		$random_character = $input[mt_rand(0, $input_length - 1)];
-		$random_string .= $random_character;
-	}
-
-	return $random_string;
-}
-
+// Create blank image
 $image = imagecreatetruecolor(200, 50);
 
 imageantialias($image, true);
@@ -32,6 +22,7 @@ for ($i = 0; $i < 5; $i++) {
 
 imagefill($image, 0, 0, $colors[0]);
 
+// Draw rectangles in random locations
 for ($i = 0; $i < 10; $i++) {
 	imagesetthickness($image, rand(2, 10));
 	$line_color = $colors[rand(1, 4)];
@@ -43,13 +34,8 @@ $white = imagecolorallocate($image, 255, 255, 255);
 $textcolors = [$black, $white];
 
 $fonts = [dirname(__FILE__) . '/fonts/Acme.ttf', dirname(__FILE__) . '/fonts/Ubuntu.ttf', dirname(__FILE__) . '/fonts/Merriweather.ttf', dirname(__FILE__) . '/fonts/PlayfairDisplay.ttf'];
-// $fonts = ['./fonts/Acme.ttf'];
 
-$string_length = 6;
-$captcha_string = generate_string($permitted_chars, $string_length);
-
-$_SESSION['captcha_text'] = $captcha_string;
-
+// Draw CAPTCHA string on background
 for ($i = 0; $i < $string_length; $i++) {
 	$letter_space = 170 / $string_length;
 	$initial = 15;
@@ -57,6 +43,7 @@ for ($i = 0; $i < $string_length; $i++) {
 	imagettftext($image, 24, rand(-15, 15), $initial + $i * $letter_space, rand(25, 45), $textcolors[rand(0, 1)], $fonts[array_rand($fonts)], $captcha_string[$i]);
 }
 
+// Create the image
 header('Content-type: image/png');
 imagepng($image);
 imagedestroy($image);
