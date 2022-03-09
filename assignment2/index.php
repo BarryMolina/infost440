@@ -12,6 +12,7 @@
 </head>
 
 <body>
+	<?php include 'header.html' ?>
 	<main>
 		<div class="container">
 			<form action="index.php" method="POST">
@@ -344,6 +345,7 @@
 			</div>
 		</div>
 	</main>
+	<?php include 'footer.html' ?>
 </body>
 
 </html>

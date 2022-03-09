@@ -8,6 +8,10 @@ main {
 	margin: 50px auto;
 }
 
+header, footer {
+	background-color: black;
+}
+
 /* Styles for rendered license */
 .temp-license {
 	min-height: 100px;
