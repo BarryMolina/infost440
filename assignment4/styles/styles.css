@@ -1,0 +1,19 @@
+html {
+	/* font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+}
+
+.navbar-brand {
+	font-family: 'Special Elite', cursive;
+}
+
+.nav-link,
+h1,
+legend,
+thead {
+	font-family: 'Dancing Script', cursive;
+}
+
+.nav-link,
+thead {
+	font-size: larger;
+}
