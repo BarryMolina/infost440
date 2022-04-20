@@ -1,16 +1,16 @@
 <?php
-$page = "home";
 include('header.php');
 include('mysqli_connect.php');
 
+// Grab all guestbook entries right away
 $query = "SELECT guestbook_id, CONCAT(fname, ' ', lname) as name, comment, DATE_FORMAT(date, '%M %e, %Y') as date FROM guestbook";
 $results = mysqli_query($dbc, $query);
-// print_r(mysqli_fetch_array($results, MYSQLI_ASSOC));
 ?>
 
 <main>
 	<div class="container">
 		<h1>The Guestbook</h1>
+		<!-- Guestbook entires in Bootstrap table -->
 		<table class="table">
 			<thead>
 				<tr>
@@ -22,6 +22,7 @@ $results = mysqli_query($dbc, $query);
 			</thead>
 			<tbody>
 				<?php
+				// Generate entry rows
 				while ($row = mysqli_fetch_array($results, MYSQLI_ASSOC)) {
 					$id = $row['guestbook_id'];
 					$name = $row['name'];

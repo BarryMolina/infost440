@@ -7,14 +7,15 @@ include('mysqli_connect.php');
 	<div class="container">
 		<form action="update.php" method="post">
 			<?php
+			// Default values
 			$guestbook_id = '';
 			$comment = '';
 
 			$all_valid = true;
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
 				// Populate variable values from POST data if it exists
 				// Else, display error message
-
 				if (isset($_POST['guestbook-id']) && $_POST['guestbook-id'] != '') {
 					$guestbook_id = $_POST['guestbook-id'];
 				} else {
@@ -24,7 +25,7 @@ include('mysqli_connect.php');
 					echo "</div>";
 				}
 
-				if (isset($_POST['comment'])) {
+				if (isset($_POST['comment']) && $_POST['comment'] != '') {
 					$comment = $_POST['comment'];
 				} else {
 					$all_valid = false;
@@ -34,10 +35,12 @@ include('mysqli_connect.php');
 				}
 
 				if ($all_valid) {
+					// Create SQL statement
 					$query = "UPDATE guestbook SET comment = '$comment' WHERE guestbook_id = '$guestbook_id'";
 
 					$results = mysqli_query($dbc, $query);
 
+					// Check if SQL ran successfully
 					if ($results) {
 						echo '<div class="alert alert-success" role="alert">';
 						echo 'SQL query ran successfully';
@@ -47,7 +50,7 @@ include('mysqli_connect.php');
 						echo "Error updating database: " . mysqli_error($dbc);
 						echo "</div>";
 					}
-					// Reset Fields
+					// Reset Fields once database is updated
 					$guestbook_id = '';
 					$comment = '';
 				}

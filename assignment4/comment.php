@@ -6,6 +6,7 @@ include('mysqli_connect.php');
 	<div class="container">
 		<form action="comment.php" method="post">
 			<?php
+			// Array to hold field info
 			$fields = array(
 				'first-name' => array('value' => '', 'friendly-name' => 'first name'),
 				'last-name' => array('value' => '', 'friendly-name' => 'last name'),
@@ -13,6 +14,7 @@ include('mysqli_connect.php');
 			);
 
 			$all_valid = true;
+
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				// Populate variable values from POST data if it exists
 				// Else, display error message
@@ -32,10 +34,12 @@ include('mysqli_connect.php');
 					$first_name = $fields['first-name']['value'];
 					$last_name = $fields['last-name']['value'];
 					$comment = $fields['comment']['value'];
+					// Create SQL query
 					$query = "INSERT INTO guestbook (fname, lname, comment) VALUES ('$first_name', '$last_name', '$comment')";
 
 					$results = mysqli_query($dbc, $query);
 
+					// Check if SQL ran successfully
 					if ($results) {
 						echo '<div class="alert alert-success" role="alert">';
 						echo 'SQL query ran successfully';
@@ -47,7 +51,7 @@ include('mysqli_connect.php');
 					}
 				}
 			}
-			// Reset fields if SQL was submitted (or form wasn't submitted). Otherwise use previous values
+			// Reset fields if SQL ran (or form hasn't been submitted yet). Otherwise use sticky values
 			if ($all_valid) {
 				$first_name = '';
 				$last_name = '';
@@ -78,10 +82,7 @@ include('mysqli_connect.php');
 					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
 			</fieldset>
-
-
 		</form>
-
 </main>
 
 <?php include('footer.php'); ?>

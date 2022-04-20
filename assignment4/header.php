@@ -24,11 +24,13 @@
 	<nav class="navbar navbar-expand-sm navbar-light bg-light mb-4">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="index.php">Barry's Bed & Breakfast</a>
+			<!-- Dropdown menu for small screen sizes -->
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavDropdown">
 				<ul class="navbar-nav me-auto mb-2 mb-sm-0">
+					<!-- For each navigation link, check if the link leads to the current active page. If it does, style accordingly -->
 					<li class="nav-item">
 						<a class="nav-link <?php echo (basename($_SERVER['REQUEST_URI']) == 'index.php') ? 'active' : ''; ?>" href="index.php">Home</a>
 					</li>

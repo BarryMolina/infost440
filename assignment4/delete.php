@@ -23,11 +23,13 @@ include('mysqli_connect.php');
 					echo "</div>";
 				}
 
+				// Run SQL if user entered a guestbook id
 				if ($all_valid) {
 					$query = "DELETE from guestbook where guestbook_id = $guestbook_id";
 
 					$results = mysqli_query($dbc, $query);
 
+					// Check if SQL ran successfully
 					if ($results) {
 						echo '<div class="alert alert-success" role="alert">';
 						echo 'SQL query ran successfully';
