@@ -21,7 +21,6 @@
 </head>
 
 <body>
-	<?php echo basename($_SERVER['REQUEST_URI']); ?>
 	<nav class="navbar navbar-expand-sm navbar-light bg-light mb-4">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="index.php">Barry's Bed & Breakfast</a>

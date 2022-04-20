@@ -10,8 +10,8 @@ include('mysqli_connect.php');
 			$guestbook_id = '';
 			$comment = '';
 
+			$all_valid = true;
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-				$all_valid = true;
 				// Populate variable values from POST data if it exists
 				// Else, display error message
 
@@ -47,6 +47,9 @@ include('mysqli_connect.php');
 						echo "Error updating database: " . mysqli_error($dbc);
 						echo "</div>";
 					}
+					// Reset Fields
+					$guestbook_id = '';
+					$comment = '';
 				}
 			}
 			?>
@@ -59,7 +62,7 @@ include('mysqli_connect.php');
 				</div>
 				<!-- Comment box -->
 				<div class="col-md-12">
-					<label class="form-label" for="comment">Please enter an updated comment</label>
+					<label class="form-label" for="comment">Enter your updated comment</label>
 					<textarea class="form-control" id="comment" name="comment" rows="5"><?php echo $comment ?></textarea>
 				</div>
 				<div class="col-12">

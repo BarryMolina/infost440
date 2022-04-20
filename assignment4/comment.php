@@ -12,8 +12,8 @@ include('mysqli_connect.php');
 				'comment' => array('value' => '', 'friendly-name' => 'comment')
 			);
 
+			$all_valid = true;
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-				$all_valid = true;
 				// Populate variable values from POST data if it exists
 				// Else, display error message
 				foreach ($fields as $field => $attrs) {
@@ -47,10 +47,16 @@ include('mysqli_connect.php');
 					}
 				}
 			}
-			// Initialize variables with values to be used in form
-			$first_name = $fields['first-name']['value'];
-			$last_name = $fields['last-name']['value'];
-			$comment = $fields['comment']['value'];
+			// Reset fields if SQL was submitted (or form wasn't submitted). Otherwise use previous values
+			if ($all_valid) {
+				$first_name = '';
+				$last_name = '';
+				$comment = '';
+			} else {
+				$first_name = $fields['first-name']['value'];
+				$last_name = $fields['last-name']['value'];
+				$comment = $fields['comment']['value'];
+			}
 			?>
 			<fieldset class="row gx-3 gy-3">
 				<legend>New Guestbook Entry</legend>
