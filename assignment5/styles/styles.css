@@ -21,3 +21,9 @@ thead {
 thead {
 	font-size: larger;
 }
+
+/* Action button styles */
+.btn-outline-danger,
+.btn-outline-primary {
+	border: none;
+}
