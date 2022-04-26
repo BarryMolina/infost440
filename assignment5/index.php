@@ -161,14 +161,6 @@ switch ($sort) {
 		break;
 }
 
-//Sort buttons
-echo '<div align="center">';
-echo '<strong> Sort By: </strong>';
-echo '<a href="?sort=fname">First Name</a> |';
-echo '<a href="?sort=lname">Last name</a> |';
-echo '<a href="?sort=date">Date</a>';
-echo '</div>';
-
 //***********************************************
 //SORTING SETUP END
 //***********************************************
@@ -186,7 +178,24 @@ $selet_all_results = mysqli_query($dbc, $select_all_query);
 			echo display_notification($notification['alert-level'], $notification['message']);
 		}
 		?>
-		<h1>The Guestbook</h1>
+		<div class="d-flex justify-content-between align-items-center">
+			<h1>The Guestbook</h1>
+			<ul class="nav nav-pills">
+				<li class="nav-item">
+					<a class="nav-link <?php echo $sort == 'fname' ? 'active' : '' ?>" href="?sort=fname">First name</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link <?php echo $sort == 'lname' ? 'active' : '' ?>" href="?sort=lname">Last name</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle <?php echo $sort == 'date' ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" href="?sort=date">Date</a>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="#">Ascending</a></li>
+						<li><a class="dropdown-item" href="#">Decending</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 		<!-- Guestbook entires in Bootstrap table -->
 		<table class="table">
 			<thead>

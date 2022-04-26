@@ -1,23 +1,23 @@
 /* Custom fonts and sizing */
 
-.navbar-brand {
+/* .navbar-brand {
 	font-family: 'Special Elite', cursive;
 	color: #984447 !important;
-}
+} */
 
 legend,
 h1 {
 	color: #476C9B !important;
 }
 
-.nav-link,
+#navbarNavDropdown .nav-link,
 h1,
 legend,
 thead {
 	font-family: 'Dancing Script', cursive;
 }
 
-.nav-link,
+#navbarNavDropdown .nav-link,
 thead {
 	font-size: larger;
 }
