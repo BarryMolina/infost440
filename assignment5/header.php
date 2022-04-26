@@ -38,12 +38,6 @@
 					<li class="nav-item">
 						<a class="nav-link <?php echo $page == 'comment.php' ? 'active' : ''; ?>" href="comment.php">Create</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link <?php echo $page == 'update.php' ? 'active' : ''; ?>" href="update.php">Edit</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link <?php echo $page == 'delete.php' ? 'active' : ''; ?>" href="delete.php">Delete</a>
-					</li>
 				</ul>
 			</div>
 		</div>

@@ -231,40 +231,45 @@ $selet_all_results = mysqli_query($dbc, $select_all_query);
 		//***********************************************
 		//PAGINATION PREVIOUS AND NEXT PAGE BUTTONS/LINKS START
 		//***********************************************
-
 		// Make the links to other pages, if necessary.
-		if ($pages > 1) {
-
-			echo '<br /><p>';
+		if ($pages > 1) :
 			$current_page = ($start / $display) + 1;
+		?>
+			<nav aria-label="Page navigation">
+				<ul class="pagination justify-content-center">
+					<?php
+					// If it's not the first page, make a Previous button:
+					if ($current_page != 1) {
+						echo '<li class="page-item"><a class="page-link" href="?s=' . ($start - $display) . '&p=' . $pages . '&sort=' . $sort . '"><span aria-hidden="true">&laquo;</span></a></li>';
+					} else {
+						echo '<li class="page-item disabled"><span class="page-link">&laquo;</span></li>';
+					}
+					// Make all the numbered pages:
+					for ($i = 1; $i <= $pages; $i++) {
+						if ($i != $current_page) {
+							echo '<li class="page-item"><a class="page-link" href="?s=' . (($display * ($i - 1))) . '&p=' . $pages . '&sort=' . $sort . '">' . $i . '</a></li>';
+						} else {
+							echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
+						}
+					} // End of FOR loop.
 
-			// If it's not the first page, make a Previous button:
-			if ($current_page != 1) {
-				echo '<a href="?s=' . ($start - $display) . '&p=' . $pages . '&sort=' . $sort . '">Previous</a> ';
-			}
+					// If it's not the last page, make a Next button:
+					if ($current_page != $pages) {
+						echo '<li class="page-item"><a class="page-link" href="?s=' . ($start + $display) . '&p=' . $pages . '&sort=' . $sort . '"><span aria-hidden="true">&raquo;</span></a></li>';
+					} else {
+						echo '<li class="page-item disabled"><span class="page-link">&raquo;</span></li>';
+					}
+					?>
 
-			// Make all the numbered pages:
-			for ($i = 1; $i <= $pages; $i++) {
-				if ($i != $current_page) {
-					echo '<a href="?s=' . (($display * ($i - 1))) . '&p=' . $pages . '&sort=' . $sort . '">' . $i . '</a> ';
-				} else {
-					echo $i . ' ';
-				}
-			} // End of FOR loop.
-
-			// If it's not the last page, make a Next button:
-			if ($current_page != $pages) {
-				echo '<a href="?s=' . ($start + $display) . '&p=' . $pages . '&sort=' . $sort . '">Next</a>';
-			}
-
-			echo '</p>'; // Close the paragraph.
-
-		} // End of links section.
-
+				</ul>
+			</nav>
+		<?php
+		endif
 		//***********************************************
 		//PAGINATION PREVIOUS AND NEXT PAGE BUTTONS/LINKS END
 		//***********************************************
 		?>
+
 	</div>
 </main>
 <?php
