@@ -89,6 +89,9 @@ if (isset($_GET['update_id'])) {
 			$updated_comment = mysqli_real_escape_string($dbc, trim($_POST['comment']));
 			$update_comment_query = "UPDATE guestbook SET comment = '$updated_comment' WHERE guestbook_id = '$update_id'";
 			$update_comment_results = mysqli_query($dbc, $update_comment_query);
+			if ($update_comment_results) {
+				$notifications[] = array('alert-level' => 'success', 'message' => 'Guestbook entry updated');
+			}
 		} else {
 			echo get_update_modal($update_id, $update_comment, array(array('alert-level' => 'danger', 'message' => 'Please enter a comment')));
 		}
@@ -142,22 +145,31 @@ if (isset($_GET['s']) && is_numeric($_GET['s'])) {
 
 // Determine the sort...
 // Default is by registration date.
-$sort = (isset($_GET['sort'])) ? $_GET['sort'] : 'date';
+$sort = (isset($_GET['sort'])) ? $_GET['sort'] : 'date_desc';
 
 // Determine the sorting order:
 switch ($sort) {
-	case 'lname':
-		$order_by = 'lname ASC';
-		break;
-	case 'fname':
+	case 'fname_asc':
 		$order_by = 'fname ASC';
 		break;
-	case 'date':
+	case 'fname_desc':
+		$order_by = 'fname DESC';
+		break;
+	case 'lname_asc':
+		$order_by = 'lname ASC';
+		break;
+	case 'lname_desc':
+		$order_by = 'lname DESC';
+		break;
+	case 'date_asc':
+		$order_by = 'date ASC';
+		break;
+	case 'date_desc':
 		$order_by = 'date DESC';
 		break;
 	default:
 		$order_by = 'date DESC';
-		$sort = 'date';
+		$sort = 'date_desc';
 		break;
 }
 
@@ -180,18 +192,27 @@ $selet_all_results = mysqli_query($dbc, $select_all_query);
 		?>
 		<div class="d-flex justify-content-between align-items-center">
 			<h1>The Guestbook</h1>
+			<!-- Sorting nav pills  -->
 			<ul class="nav nav-pills">
-				<li class="nav-item">
-					<a class="nav-link <?php echo $sort == 'fname' ? 'active' : '' ?>" href="?sort=fname">First name</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link <?php echo $sort == 'lname' ? 'active' : '' ?>" href="?sort=lname">Last name</a>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'fname') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">First name</a>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item <?php echo $sort == 'fname_asc' ? 'active' : '' ?>" href="?sort=fname_asc">Ascending</a></li>
+						<li><a class="dropdown-item <?php echo $sort == 'fname_desc' ? 'active' : '' ?>" href="?sort=fname_desc">Decending</a></li>
+					</ul>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle <?php echo $sort == 'date' ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" href="?sort=date">Date</a>
+					<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'lname') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Last name</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">Ascending</a></li>
-						<li><a class="dropdown-item" href="#">Decending</a></li>
+						<li><a class="dropdown-item <?php echo $sort == 'lname_asc' ? 'active' : '' ?>" href="?sort=lname_asc">Ascending</a></li>
+						<li><a class="dropdown-item <?php echo $sort == 'lname_desc' ? 'active' : '' ?>" href="?sort=lname_desc">Decending</a></li>
+					</ul>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'date') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Date</a>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item <?php echo $sort == 'date_asc' ? 'active' : '' ?>" href="?sort=date_asc">Ascending</a></li>
+						<li><a class="dropdown-item <?php echo $sort == 'date_desc' ? 'active' : '' ?>" href="?sort=date_desc">Decending</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -247,7 +268,7 @@ $selet_all_results = mysqli_query($dbc, $select_all_query);
 			<nav aria-label="Page navigation">
 				<ul class="pagination justify-content-center">
 					<?php
-					// If it's not the first page, make a Previous button:
+					// If it's the first page, disable the previous button
 					if ($current_page != 1) {
 						echo '<li class="page-item"><a class="page-link" href="?s=' . ($start - $display) . '&p=' . $pages . '&sort=' . $sort . '"><span aria-hidden="true">&laquo;</span></a></li>';
 					} else {
@@ -262,7 +283,7 @@ $selet_all_results = mysqli_query($dbc, $select_all_query);
 						}
 					} // End of FOR loop.
 
-					// If it's not the last page, make a Next button:
+					// If it's the last page, disable the next button
 					if ($current_page != $pages) {
 						echo '<li class="page-item"><a class="page-link" href="?s=' . ($start + $display) . '&p=' . $pages . '&sort=' . $sort . '"><span aria-hidden="true">&raquo;</span></a></li>';
 					} else {
