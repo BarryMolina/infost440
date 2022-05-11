@@ -3,6 +3,7 @@
 
 $page_title = 'Register';
 include('header.php');
+include('functions.php');
 
 // Check for form submission:
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -13,21 +14,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	// Check for a first name:
 	if (empty($_POST['first_name'])) {
-		$errors[] = 'You forgot to enter your first name.';
+		// $errors[] = 'You forgot to enter your first name.';
+		$errors[] = array('alert-level' => 'danger', 'message' => 'You forgot to enter your first name.');
 	} else {
 		$fn = mysqli_real_escape_string($dbc, trim($_POST['first_name']));
 	}
 
 	// Check for a last name:
 	if (empty($_POST['last_name'])) {
-		$errors[] = 'You forgot to enter your last name.';
+		// $errors[] = 'You forgot to enter your last name.';
+		$errors[] = array('alert-level' => 'danger', 'message' => 'You forgot to enter your last name.');
 	} else {
 		$ln = mysqli_real_escape_string($dbc, trim($_POST['last_name']));
 	}
 
 	// Check for an email address:
 	if (empty($_POST['email'])) {
-		$errors[] = 'You forgot to enter your email address.';
+		// $errors[] = 'You forgot to enter your email address.';
+		$errors[] = array('alert-level' => 'danger', 'message' => 'You forgot to enter your email address.');
 	} else {
 		$e = mysqli_real_escape_string($dbc, trim($_POST['email']));
 	}
@@ -35,12 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// Check for a password and match against the confirmed password:
 	if (!empty($_POST['pass1'])) {
 		if ($_POST['pass1'] != $_POST['pass2']) {
-			$errors[] = 'Your password did not match the confirmed password.';
+			// $errors[] = 'Your password did not match the confirmed password.';
+			$errors[] = array('alert-level' => 'danger', 'message' => 'Your password did not match the confirmed password.');
 		} else {
 			$p = mysqli_real_escape_string($dbc, trim($_POST['pass1']));
 		}
 	} else {
-		$errors[] = 'You forgot to enter your password.';
+		// $errors[] = 'You forgot to enter your password.';
+		$errors[] = array('alert-level' => 'danger', 'message' => 'You forgot to enter your password.');
 	}
 
 	if (empty($errors)) { // If everything's OK.
@@ -72,12 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		exit();
 	} else { // Report the errors.
 
-		echo '<h1>Error!</h1>
-		<p class="error">The following error(s) occurred:<br />';
-		foreach ($errors as $msg) { // Print each error.
-			echo " - $msg<br />\n";
-		}
-		echo '</p><p>Please try again.</p><p><br /></p>';
+		// echo '<h1>Error!</h1>
+		// <p class="error">The following error(s) occurred:<br />';
+		// foreach ($errors as $msg) { // Print each error.
+		// 	echo " - $msg<br />\n";
+		// }
+		// echo '</p><p>Please try again.</p><p><br /></p>';
 	} // End of if (empty($errors)) IF.
 
 	mysqli_close($dbc); // Close the database connection.
@@ -95,9 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </form> -->
 <main class="container">
 	<?php
-	// foreach ($notifications as $notification) {
-	// 	echo display_notification($notification);
-	// }
+	if (isset($errors) && !empty($errors)) {
+		echo "<div class='col-lg-4 m-auto'>";
+		foreach ($errors as $error) {
+			echo display_notification($error);
+		}
+		echo "</div>";
+	}
 	?>
 	<form class="col-lg-4 p-4 bg-light border m-auto " action="register.php" method="POST">
 		<fieldset>

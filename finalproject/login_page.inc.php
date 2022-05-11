@@ -7,23 +7,19 @@ $page_title = 'Login';
 include('header.php');
 include('functions.php');
 
-// Print any error messages, if they exist:
-// if (isset($errors) && !empty($errors)) {
+// echo '<h1>Error!</h1>
+// <p class="error">The following error(s) occurred:<br />';
+// foreach ($errors as $msg) {
+// 	echo " - $msg<br />\n";
+// }
+// echo '</p><p>Please try again.</p>';
+
+// }
+// if (isset($notifications) && !empty($notifications)) {
 // 	foreach ($notifications as $notification) {
 // 		echo display_notification($notification);
 // 	}
-	// echo '<h1>Error!</h1>
-	// <p class="error">The following error(s) occurred:<br />';
-	// foreach ($errors as $msg) {
-	// 	echo " - $msg<br />\n";
-	// }
-	// echo '</p><p>Please try again.</p>';
-
 // }
-if (isset($notifications) && !empty($notifications)) {
-	foreach ($notifications as $notification) {
-		echo display_notification($notification);
-	}
 
 // Display the form:
 ?>
@@ -35,8 +31,16 @@ if (isset($notifications) && !empty($notifications)) {
 </form> -->
 <main class="container">
 	<?php
+	// Print any error messages, if they exist:
+	if (isset($errors) && !empty($errors)) {
+		echo "<div class='col-lg-4 m-auto'>";
+		foreach ($errors as $error) {
+			echo display_notification($error);
+		}
+		echo "</div>";
+	}
 	?>
-	<form class="col-lg-3 p-4 bg-light border m-auto " action="login.php" method="POST">
+	<form class="col-lg-4 p-4 bg-light border m-auto " action="login.php" method="POST">
 		<fieldset>
 			<legend>Login</legend>
 			<div class="row g-3">

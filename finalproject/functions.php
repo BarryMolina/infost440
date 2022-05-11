@@ -9,3 +9,4 @@ function display_notification($notification) {
 <?php
 	return ob_get_clean();
 }
+?>
