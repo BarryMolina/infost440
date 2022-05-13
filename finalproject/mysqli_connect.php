@@ -5,10 +5,10 @@
 // selects the database, and sets the encoding.
 
 // Set the database access information as constants:
-DEFINE('DB_USER', '440finalproject');
+DEFINE('DB_USER', 'bhmolina_440finalprojectuser');
 DEFINE('DB_PASSWORD', '7QZMO9Tx829kwazq');
 DEFINE('DB_HOST', 'localhost');
-DEFINE('DB_NAME', 'infost440-finalproject');
+DEFINE('DB_NAME', 'bhmolina_440finalproject');
 
 // Make the connection:
 $dbc = @mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die('Could not connect to MySQL: ' . mysqli_connect_error());
