@@ -14,6 +14,7 @@ $blogpost_found = false;
 // $body = '';
 // $date = '';
 
+
 // Check if user selected to update a blogpost
 if (isset($_GET['blogpost_id'])) {
 	$blogpost_id = mysqli_real_escape_string($dbc, trim($_GET['blogpost_id']));
@@ -41,6 +42,10 @@ if (isset($_GET['blogpost_id'])) {
 			$title = $blogpost['blogpost_title'];
 			$body = $blogpost['blogpost_body'];
 			$date = $blogpost['last_updated'];
+
+			if (isset($_GET['blogpost_updated']) && $_GET['blogpost_updated'] == 1) {
+				$notifications[] = array('alert-level' => 'success', 'message' => 'Blog post successfully updated');
+			}
 		}
 	}
 }

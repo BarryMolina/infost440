@@ -38,7 +38,7 @@ if (isset($_GET['delete_id'])) {
 //UPDATE LOGIC START
 //***********************************************
 
-if (isset($_GET['blogpost_updated']) && $_GET['blogpost_updated'] == 'true') {
+if (isset($_GET['blogpost_updated']) && $_GET['blogpost_updated'] == 1) {
 	$notifications[] = array('alert-level' => 'success', 'message' => 'Blog post successfully updated');
 }
 
