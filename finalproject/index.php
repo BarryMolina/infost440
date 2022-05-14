@@ -36,7 +36,7 @@ if (isset($_GET['delete_id'])) {
 //UPDATE LOGIC START
 //***********************************************
 
-function get_update_modal($update_id, $update_body, $errors = array()) {
+function get_update_modal($update_id, $update_title, $update_body, $errors = array()) {
 	$page_location = page_location_params();
 	ob_start(); ?>
 	<!-- Update blogpost modal -->
@@ -55,12 +55,18 @@ function get_update_modal($update_id, $update_body, $errors = array()) {
 						}
 
 						?>
-						<textarea class="form-control" id="blogpost-body" name="blogpost_body" rows="5"><?php echo $update_body ?></textarea>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Save changes</button>
-					</div>
+						<div class="col-md-12 mb-3">
+							<label for="blogpost-title" class="form-label">Title:</label>
+							<input type="text" name="blogpost-title" class="form-control" id="blogpost-title" value="<?php echo $update_title ?>">
+						</div>
+						<div class="col-md-12">
+							<label class="form-label" for="blogpost-body">Body:</label>
+							<textarea class="form-control" id="blogpost-body" name="blogpost_body" rows="5"><?php echo $update_body ?></textarea>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save changes</button>
+						</div>
 				</form>
 			</div>
 		</div>
@@ -78,33 +84,33 @@ function get_update_modal($update_id, $update_body, $errors = array()) {
 	return ob_get_clean();
 }
 
-// Check if user selected to update a blogpost
-if (isset($_GET['update_id'])) {
-	$update_id = mysqli_real_escape_string($dbc, trim($_GET['update_id']));
+// // Check if user selected to update a blogpost
+// if (isset($_GET['update_id'])) {
+// 	$update_id = mysqli_real_escape_string($dbc, trim($_GET['update_id']));
 
-	// Check which stage of update process we are on
-	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-		// Grab comment from blogpost
-		$select_blogpost_query = "SELECT blogpost_body from blogposts WHERE blogpost_id = $update_id";
-		$select_blogpost_result = mysqli_query($dbc, $select_blogpost_query);
-		if ($select_blogpost_result) {
-			$update_blogpost = mysqli_fetch_array($select_blogpost_result, MYSQLI_ASSOC)['blogpost_body'];
-			echo get_update_modal($update_id, $update_blogpost);
-		}
-		// User has updated comment and clicked "save changes"
-	} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-		if (isset($_POST['blogpost_body']) && $_POST['blogpost_body'] != '') {
-			$update_blogpost = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
-			$update_blogpost_query = "UPDATE blogposts SET blogpost_body = '$update_blogpost' WHERE blogpost_id = '$update_id'";
-			$update_blogpost_result = mysqli_query($dbc, $update_blogpost_query);
-			if ($update_blogpost_result) {
-				$notifications[] = array('alert-level' => 'success', 'message' => 'Blogpost updated');
-			}
-		} else {
-			echo get_update_modal($update_id, '', array(array('alert-level' => 'danger', 'message' => 'Please add a blogpost body')));
-		}
-	}
-}
+// 	// Check which stage of update process we are on
+// 	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+// 		// Grab comment from blogpost
+// 		$select_blogpost_query = "SELECT blogpost_body, blogpost_title from blogposts WHERE blogpost_id = $update_id";
+// 		$select_blogpost_result = mysqli_query($dbc, $select_blogpost_query);
+// 		if ($select_blogpost_result) {
+// 			$update_blogpost = mysqli_fetch_array($select_blogpost_result, MYSQLI_ASSOC);
+// 			echo get_update_modal($update_id, $update_blogpost['blogpost_title'], $update_blogpost['blogpost_body']);
+// 		}
+// 		// User has updated comment and clicked "save changes"
+// 	} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// 		if (isset($_POST['blogpost_body']) && $_POST['blogpost_body'] != '') {
+// 			$update_blogpost = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
+// 			$update_blogpost_query = "UPDATE blogposts SET blogpost_body = '$update_blogpost' WHERE blogpost_id = '$update_id'";
+// 			$update_blogpost_result = mysqli_query($dbc, $update_blogpost_query);
+// 			if ($update_blogpost_result) {
+// 				$notifications[] = array('alert-level' => 'success', 'message' => 'Blogpost updated');
+// 			}
+// 		} else {
+// 			echo get_update_modal($update_id, '', array(array('alert-level' => 'danger', 'message' => 'Please add a blogpost body')));
+// 		}
+// 	}
+// }
 //***********************************************
 //UPDATE LOGIC END
 //***********************************************
@@ -267,7 +273,7 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 									<div class="d-flex justify-content-between align-items-center">
 										<p class="card-text mb-0"><small class="text-muted">Last updated <?php echo $date ?></small></p>
 										<div>
-											<a class="btn btn-outline-primary" href="index.php?<?php echo $page_location ?>&update_id=<?php echo $id ?>">
+											<a class="btn btn-outline-primary" href="update.php?update_id=<?php echo $id ?>">
 												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
 													<path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
 												</svg>
