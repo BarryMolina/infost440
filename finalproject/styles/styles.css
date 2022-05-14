@@ -1,0 +1,37 @@
+/* Action button styles */
+.btn-outline-danger,
+.btn-outline-primary {
+	border: none;
+	/* padding: .6rem .75rem */
+}
+
+#blogposts {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.blogpost {
+	transition: all 0.3s ease;
+	/* transition: box-shadow 0.3s ease-in-out; */
+
+}
+
+.blogpost:hover {
+	cursor: pointer;
+	background-color: #f8f9fa;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+/* Pre-render the bigger shadow, but hide it */
+.blogpost::after {
+	display: block;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	/* opacity: 1; */
+	/* transition: opacity 0.3s ease-in-out; */
+}
+
+/* Transition to showing the bigger shadow on hover */
+.blogpost:hover::after {
+	opacity: 1;
+}
