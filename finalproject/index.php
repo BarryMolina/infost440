@@ -6,6 +6,12 @@ include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
 
+// Array to hold validation errors and success banners
+$notifications = array();
+
+// The sort and pagination params needed to maintain page location while updating and deleting
+$page_location = page_location_params();
+
 //If a user name is entered display login mesage
 if (isset($_SESSION['first_name'])) {
 	echo "You currently logged in as {$_SESSION['first_name']}. Welcome to our website!";
@@ -19,9 +25,89 @@ if (isset($_GET['delete_id'])) {
 	$delete_query = "DELETE from blogposts WHERE blogpost_id = $delete_id";
 	$delete_results = mysqli_query($dbc, $delete_query);
 	if ($delete_results) {
-		$notifications[] = array('alert-level' => 'danger', 'message' => 'Guestbook entry deleted');
+		$notifications[] = array('alert-level' => 'danger', 'message' => 'Blogpost deleted');
 	}
 }
+//***********************************************
+//DELETE LOGIC END
+//***********************************************
+
+//***********************************************
+//UPDATE LOGIC START
+//***********************************************
+
+function get_update_modal($update_id, $update_body, $errors = array()) {
+	$page_location = page_location_params();
+	ob_start(); ?>
+	<!-- Update blogpost modal -->
+	<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Update Blogpost</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form action="index.php?<?php echo $page_location ?>&update_id=<?php echo $update_id ?>" method="post">
+					<div class="modal-body">
+						<?php
+						foreach ($errors as $error) {
+							echo display_notification($error['alert-level'], $error['message']);
+						}
+
+						?>
+						<textarea class="form-control" id="blogpost-body" name="blogpost_body" rows="5"><?php echo $update_body ?></textarea>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save changes</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- javascript to open update modal on page load-->
+		<script>
+			// Only run once bootstrap js has loaded
+			window.onload = function loaded() {
+				var myModal = new bootstrap.Modal(document.getElementById('updateModal'))
+				myModal.show()
+			}
+		</script>
+	</div>
+
+<?php
+	return ob_get_clean();
+}
+
+// Check if user selected to update a blogpost
+if (isset($_GET['update_id'])) {
+	$update_id = mysqli_real_escape_string($dbc, trim($_GET['update_id']));
+
+	// Check which stage of update process we are on
+	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+		// Grab comment from blogpost
+		$select_blogpost_query = "SELECT blogpost_body from blogposts WHERE blogpost_id = $update_id";
+		$select_blogpost_result = mysqli_query($dbc, $select_blogpost_query);
+		if ($select_blogpost_result) {
+			$update_blogpost = mysqli_fetch_array($select_blogpost_result, MYSQLI_ASSOC)['blogpost_body'];
+			echo get_update_modal($update_id, $update_blogpost);
+		}
+		// User has updated comment and clicked "save changes"
+	} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		if (isset($_POST['blogpost_body']) && $_POST['blogpost_body'] != '') {
+			$update_blogpost = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
+			$update_blogpost_query = "UPDATE blogposts SET blogpost_body = '$update_blogpost' WHERE blogpost_id = '$update_id'";
+			$update_blogpost_result = mysqli_query($dbc, $update_blogpost_query);
+			if ($update_blogpost_result) {
+				$notifications[] = array('alert-level' => 'success', 'message' => 'Blogpost updated');
+			}
+		} else {
+			echo get_update_modal($update_id, '', array(array('alert-level' => 'danger', 'message' => 'Please add a blogpost body')));
+		}
+	}
+}
+//***********************************************
+//UPDATE LOGIC END
+//***********************************************
 
 //***********************************************
 //PAGINATION SETUP START
@@ -103,8 +189,10 @@ $select_all_query = "
 	SELECT blogpost_id, 
 	CONCAT(first_name, ' ', last_name) as author, 
 	blogpost_title, blogpost_body, 
-	DATE_FORMAT(blogpost_timestamp, '%M %e, %Y') as last_updated 
-	FROM blogposts JOIN users WHERE blogposts.user_id = users.user_id 
+	DATE_FORMAT(blogpost_timestamp, '%r on %M %e, %Y') as last_updated 
+	FROM blogposts 
+	JOIN users 
+	WHERE blogposts.user_id = users.user_id 
 	ORDER BY $order_by 
 	LIMIT $start, $display";
 // $select_all_query = "SELECT * FROM blogposts ORDER BY $order_by LIMIT $start, $display";
@@ -117,9 +205,9 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 <main>
 	<div class="container" id="blogposts">
 		<?php
-		// foreach ($notifications as $notification) {
-		// 	echo display_notification($notification['alert-level'], $notification['message']);
-		// }
+		foreach ($notifications as $notification) {
+			echo display_notification($notification['alert-level'], $notification['message']);
+		}
 		?>
 		<!-- <div class="d-flex justify-content-between align-items-center"> -->
 		<div class="row mb-3">

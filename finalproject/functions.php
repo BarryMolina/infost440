@@ -1,12 +1,9 @@
 <?php
 // Reusable function to display notifications
-function display_notification($notification) {
-	if (!isset($notification['alert-level']) || !isset($notification['message'])) {
-		return;
-	}
+function display_notification($alert_level, $message) {
 	ob_start();
 ?>
-	<div class='alert alert-<?php echo $notification['alert-level'] ?>' role='alert'><?php echo $notification['message'] ?></div>
+	<div class='alert alert-<?php echo $alert_level ?>' role='alert'><?php echo $message ?></div>
 <?php
 	return ob_get_clean();
 }
