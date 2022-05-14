@@ -35,7 +35,7 @@ include('functions.php');
 	if (isset($errors) && !empty($errors)) {
 		echo "<div class='col-lg-4 m-auto'>";
 		foreach ($errors as $error) {
-			echo display_notification($error);
+			echo display_notification($error['alert-level'], $error['message']);
 		}
 		echo "</div>";
 	}
