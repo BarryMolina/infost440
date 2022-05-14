@@ -4,7 +4,7 @@ include('functions.php');
 include('mysqli_connect.php');
 
 // echo $_SERVER['REQUEST_URI'];
-$blogpost_found = false;
+$blogpost_found = true;
 // echo $previous_page;
 // $parts = parse_url($_SERVER['HTTP_REFERER']);
 // print_r($parts);
@@ -38,10 +38,11 @@ if (isset($_GET['update_id'])) {
 		$select_blogpost_query = "SELECT blogpost_body, blogpost_title from blogposts WHERE blogpost_id = $update_id";
 		$select_blogpost_result = mysqli_query($dbc, $select_blogpost_query);
 		if ($select_blogpost_result && $update_blogpost = mysqli_fetch_array($select_blogpost_result, MYSQLI_ASSOC)) {
-			$blogpost_found = true;
 			$update_title = $update_blogpost['blogpost_title'];
 			$update_body = $update_blogpost['blogpost_body'];
 			// echo get_update_modal($update_id, $update_blogpost['blogpost_title'], $update_blogpost['blogpost_body']);
+		} else {
+			$blogpost_found = false;
 		}
 		// User has updated comment and clicked "save changes"
 	} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
