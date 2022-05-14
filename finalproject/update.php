@@ -12,7 +12,7 @@ if (isset($_GET['update_id'])) {
 
 	// Check which stage of update process we are on
 	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-		// Grab comment from blogpost
+		// Grab blogpost
 		$select_blogpost_query = "SELECT blogpost_body, blogpost_title from blogposts WHERE blogpost_id = $update_id";
 		$select_blogpost_result = mysqli_query($dbc, $select_blogpost_query);
 		if ($select_blogpost_result) {
@@ -31,7 +31,6 @@ if (isset($_GET['update_id'])) {
 			$update_body = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
 		} else {
 			$all_valid = false;
-			// echo get_update_modal($update_id, '', array(array('alert-level' => 'danger', 'message' => 'Please add a blogpost body')));
 			$errors[] = array('alert-level' => 'danger', 'message' => 'Please add a blogpost body');
 		}
 
@@ -47,7 +46,11 @@ if (isset($_GET['update_id'])) {
 			$update_blogpost_query = "UPDATE blogposts SET blogpost_title = '$update_title', blogpost_body = '$update_body' WHERE blogpost_id = '$update_id'";
 			$update_blogpost_result = mysqli_query($dbc, $update_blogpost_query);
 			if ($update_blogpost_result) {
-				$notifications[] = array('alert-level' => 'success', 'message' => 'Blogpost updated');
+				// print_r($update_blogpost_result);
+				// $notifications[] = array('alert-level' => 'success', 'message' => 'Blogpost updated');
+				header("Location: index.php?blogpost_updated=true");
+				// } else {
+				// 	header("Location: index.php?");
 			}
 		}
 	}
@@ -79,3 +82,8 @@ if (isset($_GET['update_id'])) {
 		</form>
 	</div>
 </main>
+
+<?php
+// footer
+include('footer.php');
+?>

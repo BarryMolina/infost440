@@ -6,6 +6,8 @@ include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
 
+$BLOGPOST_BODY_MAX_LENGTH = 256;
+
 // Array to hold validation errors and success banners
 $notifications = array();
 
@@ -35,6 +37,10 @@ if (isset($_GET['delete_id'])) {
 //***********************************************
 //UPDATE LOGIC START
 //***********************************************
+
+if (isset($_GET['blogpost_updated']) && $_GET['blogpost_updated'] == 'true') {
+	$notifications[] = array('alert-level' => 'success', 'message' => 'Blog post successfully updated');
+}
 
 function get_update_modal($update_id, $update_title, $update_body, $errors = array()) {
 	$page_location = page_location_params();
@@ -194,7 +200,9 @@ switch ($sort) {
 $select_all_query = "
 	SELECT blogpost_id, 
 	CONCAT(first_name, ' ', last_name) as author, 
-	blogpost_title, blogpost_body, 
+	blogpost_title, 
+	LENGTH(blogpost_body) as body_length,
+	SUBSTRING(blogpost_body, 1, $BLOGPOST_BODY_MAX_LENGTH) as blogpost_body, 
 	DATE_FORMAT(blogpost_timestamp, '%r on %M %e, %Y') as last_updated 
 	FROM blogposts 
 	JOIN users 
@@ -258,9 +266,12 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 					$author = $row['author'];
 					$title = $row['blogpost_title'];
 					$body = $row['blogpost_body'];
+					$body_length = $row['body_length'];
 					$date = $row['last_updated'];
+
 				?>
-					<div class="card mb-3 blogpost">
+					<!-- onclick event to redirect user to blogpost page -->
+					<div class="card mb-3 blogpost" onclick="window.location='view_blogpost.php?blogpost_id=<?php echo $id ?>'">
 						<div class="row g-0">
 							<!-- <div class="col-md-4">
 								<img src="..." class="img-fluid rounded-start" alt="...">
@@ -269,7 +280,15 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 								<div class="card-body">
 									<h5 class="card-title"><?php echo $title ?></h5>
 									<h6 class="card-title text-muted">By <?php echo $author ?></h6>
-									<p class="card-text"><?php echo $body ?></p>
+									<p class="card-text">
+										<?php
+										echo $body;
+										// Add ellipsis if body is truncated
+										if ($body_length > $BLOGPOST_BODY_MAX_LENGTH) {
+											echo '&hellip;';
+										}
+										?>
+									</p>
 									<div class="d-flex justify-content-between align-items-center">
 										<p class="card-text mb-0"><small class="text-muted">Last updated <?php echo $date ?></small></p>
 										<div>
@@ -363,6 +382,6 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 </main>
 
 <?php
-//header
+// footer
 include('footer.php');
 ?>
