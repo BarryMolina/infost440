@@ -33,7 +33,7 @@ include('functions.php');
 	<?php
 	// Print any error messages, if they exist:
 	if (isset($errors) && !empty($errors)) {
-		echo "<div class='col-lg-4 m-auto'>";
+		echo "<div class='col-sm-6 m-auto'>";
 		foreach ($errors as $error) {
 			echo display_notification($error['alert-level'], $error['message']);
 		}

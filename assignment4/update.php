@@ -5,7 +5,7 @@ include('mysqli_connect.php');
 
 <main>
 	<div class="container">
-		<form action="update.php" method="post">
+		<form action="update_blogpost.php" method="post">
 			<?php
 			// Default values
 			$guestbook_id = '';

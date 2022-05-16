@@ -9,21 +9,10 @@ include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
 
-// echo $_SERVER['REQUEST_URI'];
+// Flag to determine whether valid blogpost id was passed
 $blogpost_found = true;
-// echo $previous_page;
-// $parts = parse_url($_SERVER['HTTP_REFERER']);
-// print_r($parts);
-
 $errors = array();
 $notifications = array();
-
-if (isset($_COOKIE['UpdatePreviousPage'])) {
-	$previous_page = $_COOKIE['UpdatePreviousPage'];
-} else {
-	$previous_page = 'index.php';
-}
-
 
 // Check if user selected to update a blogpost
 if (isset($_GET['update_id'])) {
@@ -33,11 +22,10 @@ if (isset($_GET['update_id'])) {
 
 	// Check which stage of update process we are on
 	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+		// Store page name if user came from a page other than this one
 		$previous_page = basename(parse_url($_SERVER['HTTP_REFERER'])['path']);
 		$this_page = basename(parse_url($_SERVER['REQUEST_URI'])['path']);
-		// Make sure that the GET request didn't come from the same page
 		if ($this_page != $previous_page) {
-			// Set a cookie to hold the name of previous page
 			setcookie('UpdatePreviousPage', $previous_page, time() + 3600);
 		}
 		// Grab blogpost
@@ -52,6 +40,13 @@ if (isset($_GET['update_id'])) {
 		}
 		// User has updated comment and clicked "save changes"
 	} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		// Try to determine whether user came from index.php or view_blogpost.php based on cookie data
+		if (isset($_COOKIE['UpdatePreviousPage'])) {
+			$previous_page = $_COOKIE['UpdatePreviousPage'];
+		} else {
+			$previous_page = 'index.php';
+		}
+
 		$all_valid = true;
 		if (isset($_POST['blogpost_body']) && $_POST['blogpost_body'] != '') {
 			$update_body = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
@@ -90,7 +85,7 @@ if (isset($_GET['update_id'])) {
 				echo display_notification($error['alert-level'], $error['message']);
 			}
 		?>
-			<form action="update.php?update_id=<?php echo $update_id ?>" method="post">
+			<form action="update_blogpost.php?update_id=<?php echo $update_id ?>" method="post">
 				<fieldset class="row gx-3 gy-3">
 					<legend>Update Blogpost</legend>
 					<div class="col-md-12">

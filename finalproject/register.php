@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <main class="container">
 	<?php
 	if (isset($errors) && !empty($errors)) {
-		echo "<div class='col-lg-4 m-auto'>";
+		echo "<div class='col-sm-6 m-auto'>";
 		foreach ($errors as $error) {
 			echo display_notification($error['alert-level'], $error['message']);
 		}
