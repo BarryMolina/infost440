@@ -5,6 +5,7 @@ if (!isset($_SESSION['user_id'])) {
 	header('Location: login.php');
 	die();
 }
+$page_title = 'New Blogpost';
 include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
@@ -12,7 +13,6 @@ include('mysqli_connect.php');
 // Flag to determine whether valid blogpost id was passed
 $blogpost_found = true;
 $errors = array();
-$notifications = array();
 
 // Check if user selected to update a blogpost
 if (isset($_GET['update_id'])) {
@@ -48,23 +48,24 @@ if (isset($_GET['update_id'])) {
 		}
 
 		$all_valid = true;
-		if (isset($_POST['blogpost_body']) && $_POST['blogpost_body'] != '') {
-			$update_body = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
-		} else {
-			$all_valid = false;
-			$errors[] = array('alert-level' => 'danger', 'message' => 'Please add a blogpost body');
-		}
 
-		if (isset($_POST['blogpost_title']) && $_POST['blogpost_title'] != '') {
-			$update_title = mysqli_real_escape_string($dbc, trim($_POST['blogpost_title']));
+		if (isset($_POST['blogpost_title']) && ($update_title = trim($_POST['blogpost_title'])) != '') {
+			$escaped_title = mysqli_real_escape_string($dbc, trim($_POST['blogpost_title']));
 		} else {
 			$all_valid = false;
 			$errors[] = array('alert-level' => 'danger', 'message' => 'Please add a blogpost title');
 		}
 
+		if (isset($_POST['blogpost_body']) && ($update_body = trim($_POST['blogpost_body'])) != '') {
+			$escaped_body = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
+		} else {
+			$all_valid = false;
+			$errors[] = array('alert-level' => 'danger', 'message' => 'Please add a blogpost body');
+		}
+
 		// Perform blogpost update
 		if ($all_valid) {
-			$update_blogpost_query = "UPDATE blogposts SET blogpost_title = '$update_title', blogpost_body = '$update_body' WHERE blogpost_id = '$update_id'";
+			$update_blogpost_query = "UPDATE blogposts SET blogpost_title = '$escaped_title', blogpost_body = '$escaped_body' WHERE blogpost_id = '$update_id'";
 			$update_blogpost_result = mysqli_query($dbc, $update_blogpost_query);
 
 			// Redirect to previous page with update result
@@ -98,7 +99,7 @@ if (isset($_GET['update_id'])) {
 					</div>
 					<div class="col-md-12">
 						<button type="button" class="btn btn-secondary" onclick='window.location="<?php echo $previous_page . "?blogpost_id=$update_id" ?>"'>Cancel</button>
-						<button type=" submit" class="btn btn-primary">Save changes</button>
+						<button type="submit" class="btn btn-primary">Save changes</button>
 					</div>
 				</fieldset>
 			</form>

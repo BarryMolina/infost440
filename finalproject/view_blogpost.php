@@ -134,7 +134,7 @@ if (isset($_GET['blogpost_id'])) {
 			<?php
 
 			// Comments
-			if ($select_comments_results) :
+			if ($select_comments_results && $select_comments_results->num_rows > 0) :
 			?>
 				<div class="comments">
 					<?php

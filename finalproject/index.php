@@ -1,7 +1,8 @@
 <?php
 //Create Session
-// session_start();
+session_start();
 //header
+$page_title = "Barry's Blog";
 include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
