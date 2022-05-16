@@ -21,10 +21,18 @@ function cancelUpdateComment(commentId) {
 }
 
 // Code to display comment update form in line
-function updateComment(blogpost_id, commentId, commentBody) {
-	// let comment = document.getElementById('comment-' + commentId)
-	const updateFormHtml = `
-			<form id="comment-${commentId}-update-form" action="view_blogpost.php?blogpost_id=${blogpost_id}&update_comment_id=${commentId}" method="post">
+function updateComment(blogpost_id, commentId) {
+	// Check if update form is already open
+	const updateFormId = `comment-${commentId}-update-form`
+	const updateForm = document.getElementById(updateFormId)
+	if (updateForm) {
+		// Update form already displayed, close form
+		cancelUpdateComment(commentId)
+	} else {
+		let commentBodyEl = document.getElementById(`comment-${commentId}-body`)
+		const commentBody = commentBodyEl.textContent
+		const updateFormHtml = `
+			<form id="${updateFormId}" action="view_blogpost.php?blogpost_id=${blogpost_id}&update_comment_id=${commentId}" method="post">
 				<textarea class="form-control mb-3" id="comment_body_input" name="updated_comment_body" rows="5">${commentBody}</textarea>
 				<div>
 					<button type="button" class="btn btn-secondary" onclick="cancelUpdateComment(${commentId})">Cancel</button>
@@ -32,13 +40,24 @@ function updateComment(blogpost_id, commentId, commentBody) {
 				</div>
 			</form>
 		`
-	let updateFormEl = htmlToElement(updateFormHtml)
-	let commentBodyEl = document.getElementById(`comment-${commentId}-body`)
-	commentBodyEl.classList.add('d-none')
-	commentBodyEl.insertAdjacentElement('afterend', updateFormEl)
+		let updateFormEl = htmlToElement(updateFormHtml)
+		commentBodyEl.classList.add('d-none')
+		commentBodyEl.insertAdjacentElement('afterend', updateFormEl)
+	}
 }
-
-// Code to display add new comment form
-function addComment(blogpost_id) {
-
-}
+// function updateComment(blogpost_id, commentId, commentBody) {
+// 	// let comment = document.getElementById('comment-' + commentId)
+// 	const updateFormHtml = `
+// 			<form id="comment-${commentId}-update-form" action="view_blogpost.php?blogpost_id=${blogpost_id}&update_comment_id=${commentId}" method="post">
+// 				<textarea class="form-control mb-3" id="comment_body_input" name="updated_comment_body" rows="5">${commentBody}</textarea>
+// 				<div>
+// 					<button type="button" class="btn btn-secondary" onclick="cancelUpdateComment(${commentId})">Cancel</button>
+// 					<button type="submit" class="btn btn-primary">Save changes</button>
+// 				</div>
+// 			</form>
+// 		`
+// 	let updateFormEl = htmlToElement(updateFormHtml)
+// 	let commentBodyEl = document.getElementById(`comment-${commentId}-body`)
+// 	commentBodyEl.classList.add('d-none')
+// 	commentBodyEl.insertAdjacentElement('afterend', updateFormEl)
+// }

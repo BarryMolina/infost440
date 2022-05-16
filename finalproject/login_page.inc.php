@@ -40,7 +40,7 @@ include('functions.php');
 		echo "</div>";
 	}
 	?>
-	<form class="col-lg-4 p-4 bg-light border m-auto " action="login.php" method="POST">
+	<form class="col-sm-6 p-4 bg-light border m-auto " action="login.php" method="POST">
 		<fieldset>
 			<legend>Login</legend>
 			<div class="row g-3">

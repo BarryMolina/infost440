@@ -104,12 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (isset($errors) && !empty($errors)) {
 		echo "<div class='col-lg-4 m-auto'>";
 		foreach ($errors as $error) {
-			echo display_notification($error);
+			echo display_notification($error['alert-level'], $error['message']);
 		}
 		echo "</div>";
 	}
 	?>
-	<form class="col-lg-4 p-4 bg-light border m-auto " action="register.php" method="POST">
+	<form class="col-sm-6 p-4 bg-light border m-auto " action="register.php" method="POST">
 		<fieldset>
 			<legend>Register</legend>
 			<div class="row g-3">

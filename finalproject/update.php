@@ -1,4 +1,10 @@
 <?php
+session_start();
+// Redirect if user not logged in
+if (!isset($_SESSION['user_id'])) {
+	header('Location: login.php');
+	die();
+}
 include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
@@ -93,7 +99,7 @@ if (isset($_GET['update_id'])) {
 					</div>
 					<div class="col-md-12">
 						<label class="form-label" for="blogpost-body">Body:</label>
-						<textarea class="form-control" id="blogpost-body" name="blogpost_body" rows="5"><?php echo $update_body ?></textarea>
+						<textarea class="form-control" id="blogpost-body" name="blogpost_body" rows="15"><?php echo $update_body ?></textarea>
 					</div>
 					<div class="col-md-12">
 						<button type="button" class="btn btn-secondary" onclick='window.location="<?php echo $previous_page . "?blogpost_id=$update_id" ?>"'>Cancel</button>

@@ -1,4 +1,5 @@
-<?php session_start(); ?>
+<?php //session_start(); 
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -14,7 +15,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Barry's Blog</a>
+			<a class="navbar-brand" href="index.php">Barry's Blog</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -24,13 +25,15 @@
 					<li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
 					<li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li>
 					<li class="nav-item"><a class="nav-link" href="password.php">Change Password</a></li>
-					<li class="nav-item"><?php // Create a login/logout link:
-																if ((isset($_SESSION['user_id'])) && (basename($_SERVER['PHP_SELF']) != 'logout.php')) {
-																	echo '<a class="nav-link" href="logout.php">Logout</a>';
-																} else {
-																	echo '<a class="nav-link" href="login.php">Login</a>';
-																}
-																?></li>
+					<li class="nav-item">
+						<?php // Create a login/logout link:
+						if ((isset($_SESSION['user_id'])) && (basename($_SERVER['PHP_SELF']) != 'logout.php')) {
+							echo '<a class="nav-link" href="logout.php">Logout</a>';
+						} else {
+							echo '<a class="nav-link" href="login.php">Login</a>';
+						}
+						?>
+					</li>
 					<!-- <li class="nav-item">
 						<a class="nav-link active" aria-current="page" href="#">Home</a>
 					</li>
