@@ -1,6 +1,10 @@
 <?php
 session_start();
+// Check if user is admin
+$is_admin = $_SESSION['user_id'] == 1;
+
 $page_title = "View Blogpost";
+
 include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
@@ -36,8 +40,9 @@ if (isset($_GET['blogpost_id'])) {
 		if (isset($_GET['update_comment_id'])) {
 			// Update existing comment
 			$update_comment_id = $_GET['update_comment_id'];
-			if (isset($_POST['updated_comment_body']) && ($update_comment_body = mysqli_real_escape_string($dbc, trim($_POST['updated_comment_body']))) != '') {
-				$update_comment_query = "UPDATE comments SET comment_body = '$update_comment_body' WHERE comment_id = $update_comment_id";
+			if (isset($_POST['updated_comment_body']) && ($update_comment_body = trim($_POST['updated_comment_body'])) != '') {
+				$escaped_comment_body = mysqli_real_escape_string($dbc, $update_comment_body);
+				$update_comment_query = "UPDATE comments SET comment_body = '$escaped_comment_body' WHERE comment_id = $update_comment_id";
 				$update_comment_result = mysqli_query($dbc, $update_comment_query);
 				if ($update_comment_result && mysqli_affected_rows($dbc) > 0) {
 					$notifications[] = array('alert-level' => 'success', 'message' => 'Comment successfully updated');
@@ -47,8 +52,9 @@ if (isset($_GET['blogpost_id'])) {
 			}
 		} else {
 			// Adding a new comment
-			if (isset($_POST['new_comment_body']) && ($new_comment_body = mysqli_real_escape_string($dbc, trim($_POST['new_comment_body']))) != '') {
-				$new_comment_query = "INSERT INTO comments (user_id, blogpost_id, comment_body) VALUES ($current_user_id, $blogpost_id, '$new_comment_body')";
+			if (isset($_POST['new_comment_body']) && ($new_comment_body = trim($_POST['new_comment_body'])) != '') {
+				$escaped_comment_body = mysqli_real_escape_string($dbc, $new_comment_body);
+				$new_comment_query = "INSERT INTO comments (user_id, blogpost_id, comment_body) VALUES ($current_user_id, $blogpost_id, '$escaped_comment_body')";
 				$new_comment_result = mysqli_query($dbc, $new_comment_query);
 				if ($new_comment_result) {
 					$notifications[] = array('alert-level' => 'success', 'message' => 'Comment successfully created');
@@ -84,7 +90,7 @@ if (isset($_GET['blogpost_id'])) {
 		$blogpost_body = $blogpost['blogpost_body'];
 		$blogpost_date = $blogpost['last_updated'];
 
-		if (isset($_GET['blogpost_updated']) && $_GET['blogpost_updated'] == 1) {
+		if (isset($_GET['blogpost_updated']) && $_GET['blogpost_updated'] == 1 && $is_admin) {
 			$notifications[] = array('alert-level' => 'success', 'message' => 'Blog post successfully updated');
 		}
 
@@ -113,18 +119,20 @@ if (isset($_GET['blogpost_id'])) {
 			<div class="mb-5">
 				<div class="d-flex justify-content-between align-items-center">
 					<h1 class=""><?php echo $blogpost_title ?></h1>
-					<div>
-						<a class="btn btn-outline-primary" href="update_blogpost.php?update_id=<?php echo $blogpost_id ?>">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-								<path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-							</svg>
-						</a>
-						<a class="btn btn-outline-danger" href="index.php?delete_id=<?php echo $blogpost_id; ?>">
-							<svg xmlns=" http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-								<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
-							</svg>
-						</a>
-					</div>
+					<?php if ($is_admin) : ?>
+						<div>
+							<a class="btn btn-outline-primary" href="update_blogpost.php?update_id=<?php echo $blogpost_id ?>">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+									<path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+								</svg>
+							</a>
+							<a class="btn btn-outline-danger" href="index.php?delete_id=<?php echo $blogpost_id; ?>">
+								<svg xmlns=" http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+									<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+								</svg>
+							</a>
+						</div>
+					<?php endif; ?>
 				</div>
 				<h5 class="text-muted"><?php echo $blogpost_author ?></h5>
 				<p class=""><small class="text-muted">Updated <?php echo $blogpost_date ?></small></p>
@@ -153,8 +161,8 @@ if (isset($_GET['blogpost_id'])) {
 										<p class="card-text" style="white-space:pre-wrap" id="comment-<?php echo $comment_id ?>-body"><?php echo $comment_body; ?></p>
 										<div class="d-flex justify-content-between align-items-center">
 											<p class="card-text mb-0"><small class="text-muted">Last updated <?php echo $comment_date ?></small></p>
-											<!-- Users can only update and delete their own comments -->
-											<?php if ($user_logged_in && $current_user_id == $comment_author_id) : ?>
+											<!-- Users can only update and delete their own comments unless user is admin -->
+											<?php if ($user_logged_in && $current_user_id == $comment_author_id || $is_admin) : ?>
 												<div>
 													<button class="btn btn-outline-primary" onclick="updateComment(<?php echo $blogpost_id ?>, <?php echo $comment_id ?>)">
 														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">

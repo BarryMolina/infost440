@@ -1,7 +1,7 @@
 <?php
 session_start();
-// Redirect if user not logged in
-if (!isset($_SESSION['user_id'])) {
+// Redirect if user not admin user
+if ($_SESSION['user_id'] != 1) {
 	header('Location: login.php');
 	die();
 }
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		echo $new_blogpost_query;
 		$new_blogpost_result = mysqli_query($dbc, $new_blogpost_query);
 		$insert_success = $new_blogpost_result ? 1 : 0;
-		header("Location: index.php?insert_blogpost=$insert_success");
+		header("Location: index.php?blogpost_inserted=$insert_success");
 		die();
 	}
 }
