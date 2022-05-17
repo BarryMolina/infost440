@@ -23,11 +23,11 @@
 				<div class="collapse navbar-collapse" id="navbar">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-						<li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
-						<li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li>
-						<li class="nav-item"><a class="nav-link" href="password.php">Change Password</a></li>
-						<li class="nav-item">
-						</li>
+						<?php if ($is_admin) : ?>
+							<li class="nav-item"><a class="nav-link" href="new_blogpost.php">New Blogpost</a></li>
+						<?php endif; ?>
+						<!-- <li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li> -->
+						<!-- <li class="nav-item"><a class="nav-link" href="password.php">Change Password</a></li> -->
 					</ul>
 					<!-- <form class="d-flex">
 						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -39,6 +39,7 @@
 						echo "<span>Hello, $user_first_name! <a class='' href='logout.php'>Logout</a></span>";
 					} else {
 						echo '<a class="nav-link" href="login.php">Login</a>';
+						echo '<a class="nav-link" href="register.php">Register</a>';
 					}
 					?>
 				</div>

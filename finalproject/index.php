@@ -20,12 +20,6 @@ $notifications = array();
 // The sort and pagination params needed to maintain page location while updating and deleting
 $page_location = page_location_params();
 
-//If a user name is entered display login mesage
-if (isset($_SESSION['first_name'])) {
-	echo "You currently logged in as {$_SESSION['first_name']}. Welcome to our website!";
-}
-
-
 //***********************************************
 //DELETE LOGIC START
 //***********************************************
