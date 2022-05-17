@@ -1,7 +1,5 @@
 <?php
 session_start();
-// Check if user is admin
-$is_admin = $_SESSION['user_id'] == 1;
 
 $page_title = "View Blogpost";
 
@@ -19,6 +17,8 @@ $blogpost_found = false;
 // Get login status and set user id
 $user_logged_in = isset($_SESSION['user_id']);
 $current_user_id = $user_logged_in ? mysqli_real_escape_string($dbc, trim($_SESSION['user_id'])) : '';
+// Check if user is admin
+$is_admin = $current_user_id == 1;
 
 // Check if blogpost id was provided
 if (isset($_GET['blogpost_id'])) {
@@ -27,10 +27,16 @@ if (isset($_GET['blogpost_id'])) {
 	// Delete comment
 	if (isset($_GET['delete_comment_id'])) {
 		$delete_id = mysqli_real_escape_string($dbc, trim($_GET['delete_comment_id']));
-		$delete_query = "DELETE from comments WHERE comment_id = $delete_id";
-		$delete_results = mysqli_query($dbc, $delete_query);
-		if ($delete_results && mysqli_affected_rows($dbc) > 0) {
-			$notifications[] = array('alert-level' => 'danger', 'message' => 'Comment deleted');
+		$comment_author_id = get_comment_author($delete_id);
+		// Make sure deletion is authorized
+		if ($comment_author_id == $current_user_id || $is_admin) {
+			$delete_query = "DELETE from comments WHERE comment_id = $delete_id";
+			$delete_results = mysqli_query($dbc, $delete_query);
+			if ($delete_results && mysqli_affected_rows($dbc) > 0) {
+				$notifications[] = array('alert-level' => 'danger', 'message' => 'Comment deleted');
+			}
+		} else {
+			$notifications[] = array('alert-level' => 'danger', 'message' => 'Unauthorized action');
 		}
 	}
 
@@ -39,16 +45,21 @@ if (isset($_GET['blogpost_id'])) {
 		// Check if comment is being updated or added
 		if (isset($_GET['update_comment_id'])) {
 			// Update existing comment
-			$update_comment_id = $_GET['update_comment_id'];
-			if (isset($_POST['updated_comment_body']) && ($update_comment_body = trim($_POST['updated_comment_body'])) != '') {
-				$escaped_comment_body = mysqli_real_escape_string($dbc, $update_comment_body);
-				$update_comment_query = "UPDATE comments SET comment_body = '$escaped_comment_body' WHERE comment_id = $update_comment_id";
-				$update_comment_result = mysqli_query($dbc, $update_comment_query);
-				if ($update_comment_result && mysqli_affected_rows($dbc) > 0) {
-					$notifications[] = array('alert-level' => 'success', 'message' => 'Comment successfully updated');
+			$update_comment_id = mysqli_real_escape_string($dbc, trim($_GET['update_comment_id']));
+			$comment_author_id = get_comment_author($update_comment_id);
+			if ($comment_author_id == $current_user_id || $is_admin) {
+				if (isset($_POST['updated_comment_body']) && ($update_comment_body = trim($_POST['updated_comment_body'])) != '') {
+					$escaped_comment_body = mysqli_real_escape_string($dbc, $update_comment_body);
+					$update_comment_query = "UPDATE comments SET comment_body = '$escaped_comment_body' WHERE comment_id = $update_comment_id";
+					$update_comment_result = mysqli_query($dbc, $update_comment_query);
+					if ($update_comment_result && mysqli_affected_rows($dbc) > 0) {
+						$notifications[] = array('alert-level' => 'success', 'message' => 'Comment successfully updated');
+					}
+				} else {
+					$notifications[] = array('alert-level' => 'danger', 'message' => 'You must enter a comment body');
 				}
 			} else {
-				$notifications[] = array('alert-level' => 'danger', 'message' => 'You must enter a comment body');
+				$notifications[] = array('alert-level' => 'danger', 'message' => 'Unauthorized action');
 			}
 		} else {
 			// Adding a new comment
@@ -210,6 +221,17 @@ if (isset($_GET['blogpost_id'])) {
 </main>
 
 <?php
+// Reusable function to get comment author user id
+function get_comment_author($comment_id) {
+	global $dbc;
+	$select_author_query = "SELECT user_id as author_id FROM comments WHERE comment_id = $comment_id";
+	// echo $select_author_query;
+	$select_author_result = mysqli_query($dbc, $select_author_query);
+	if ($select_author_result) {
+		return mysqli_fetch_array($select_author_result, MYSQLI_ASSOC)['author_id'];
+	}
+	return null;
+}
 // footer
 include('footer.php');
 ?>
