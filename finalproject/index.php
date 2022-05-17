@@ -1,9 +1,10 @@
 <?php
+include('auth.php');
 //Create Session
-session_start();
+// session_start();
 
 // Check if user is admin
-$is_admin = $_SESSION['user_id'] == 1;
+// $is_admin = isset($_SESSION['user_id']) && $_SESSION['user_id'] == 1;
 
 //header
 $page_title = "Barry's Blog";

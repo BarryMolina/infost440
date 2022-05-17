@@ -1,11 +1,12 @@
 <?php
-session_start();
+// session_start();
+include('auth.php');
 // Redirect if user not logged in
-if ($_SESSION['user_id'] != 1) {
+if (!$is_admin) {
 	header('Location: login.php');
 	die();
 }
-$page_title = 'New Blogpost';
+$page_title = 'Update Blogpost';
 include('header.php');
 include('functions.php');
 include('mysqli_connect.php');

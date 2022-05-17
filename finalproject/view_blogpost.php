@@ -1,5 +1,6 @@
 <?php
-session_start();
+// session_start();
+include('auth.php');
 
 $page_title = "View Blogpost";
 

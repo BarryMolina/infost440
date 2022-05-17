@@ -1,7 +1,8 @@
 <?php
-session_start();
-// Redirect if user not admin user
-if ($_SESSION['user_id'] != 1) {
+// session_start();
+include('auth.php');
+// Redirect if user not logged in
+if (!$is_admin) {
 	header('Location: login.php');
 	die();
 }
