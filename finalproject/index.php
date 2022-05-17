@@ -96,34 +96,6 @@ function get_update_modal($update_id, $update_title, $update_body, $errors = arr
 <?php
 	return ob_get_clean();
 }
-
-// // Check if user selected to update a blogpost
-// if (isset($_GET['update_id'])) {
-// 	$update_id = mysqli_real_escape_string($dbc, trim($_GET['update_id']));
-
-// 	// Check which stage of update process we are on
-// 	if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-// 		// Grab comment from blogpost
-// 		$select_blogpost_query = "SELECT blogpost_body, blogpost_title from blogposts WHERE blogpost_id = $update_id";
-// 		$select_blogpost_result = mysqli_query($dbc, $select_blogpost_query);
-// 		if ($select_blogpost_result) {
-// 			$update_blogpost = mysqli_fetch_array($select_blogpost_result, MYSQLI_ASSOC);
-// 			echo get_update_modal($update_id, $update_blogpost['blogpost_title'], $update_blogpost['blogpost_body']);
-// 		}
-// 		// User has updated comment and clicked "save changes"
-// 	} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-// 		if (isset($_POST['blogpost_body']) && $_POST['blogpost_body'] != '') {
-// 			$update_blogpost = mysqli_real_escape_string($dbc, trim($_POST['blogpost_body']));
-// 			$update_blogpost_query = "UPDATE blogposts SET blogpost_body = '$update_blogpost' WHERE blogpost_id = '$update_id'";
-// 			$update_blogpost_result = mysqli_query($dbc, $update_blogpost_query);
-// 			if ($update_blogpost_result) {
-// 				$notifications[] = array('alert-level' => 'success', 'message' => 'Blogpost updated');
-// 			}
-// 		} else {
-// 			echo get_update_modal($update_id, '', array(array('alert-level' => 'danger', 'message' => 'Please add a blogpost body')));
-// 		}
-// 	}
-// }
 //***********************************************
 //UPDATE LOGIC END
 //***********************************************
@@ -175,17 +147,17 @@ $sort = (isset($_GET['sort'])) ? $_GET['sort'] : 'date_desc';
 
 // Determine the sorting order:
 switch ($sort) {
-	case 'fname_asc':
-		$order_by = 'first_name ASC';
+	case 'title_asc':
+		$order_by = 'blogpost_title ASC';
 		break;
-	case 'fname_desc':
-		$order_by = 'first_name DESC';
+	case 'title_desc':
+		$order_by = 'blogpost_title DESC';
 		break;
-	case 'lname_asc':
-		$order_by = 'last_name ASC';
+	case 'comments_asc':
+		$order_by = 'num_comments ASC';
 		break;
-	case 'lname_desc':
-		$order_by = 'last_name DESC';
+	case 'comments_desc':
+		$order_by = 'num_comments DESC';
 		break;
 	case 'date_asc':
 		$order_by = 'blogpost_timestamp ASC';
@@ -210,7 +182,8 @@ $select_all_query = "
 	blogpost_title, 
 	LENGTH(blogpost_body) as body_length,
 	SUBSTRING(blogpost_body, 1, $BLOGPOST_BODY_MAX_LENGTH) as blogpost_body, 
-	DATE_FORMAT(blogpost_timestamp, '%r on %M %e, %Y') as last_updated 
+	DATE_FORMAT(blogpost_timestamp, '%r on %M %e, %Y') as last_updated,
+	(SELECT COUNT(*) FROM comments WHERE comments.blogpost_id = blogposts.blogpost_id) as num_comments
 	FROM blogposts 
 	JOIN users 
 	WHERE blogposts.user_id = users.user_id 
@@ -239,24 +212,24 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 			<div class="col-sm-8">
 				<ul class="nav nav-pills justify-content-sm-end">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'fname') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">First name</a>
+						<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'title') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Title</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item <?php echo $sort == 'fname_asc' ? 'active' : '' ?>" href="?sort=fname_asc">Ascending</a></li>
-							<li><a class="dropdown-item <?php echo $sort == 'fname_desc' ? 'active' : '' ?>" href="?sort=fname_desc">Decending</a></li>
+							<li><a class="dropdown-item <?php echo $sort == 'title_asc' ? 'active' : '' ?>" href="?sort=title_asc">A-Z</a></li>
+							<li><a class="dropdown-item <?php echo $sort == 'title_desc' ? 'active' : '' ?>" href="?sort=title_desc">Z-A</a></li>
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'lname') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Last name</a>
+						<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'comments') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Comments</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item <?php echo $sort == 'lname_asc' ? 'active' : '' ?>" href="?sort=lname_asc">Ascending</a></li>
-							<li><a class="dropdown-item <?php echo $sort == 'lname_desc' ? 'active' : '' ?>" href="?sort=lname_desc">Decending</a></li>
+							<li><a class="dropdown-item <?php echo $sort == 'comments_desc' ? 'active' : '' ?>" href="?sort=comments_desc">Highest</a></li>
+							<li><a class="dropdown-item <?php echo $sort == 'comments_asc' ? 'active' : '' ?>" href="?sort=comments_asc">Lowest</a></li>
 						</ul>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle <?php echo str_starts_with($sort, 'date') ? 'active' : '' ?>" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Date</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item <?php echo $sort == 'date_asc' ? 'active' : '' ?>" href="?sort=date_asc">Ascending</a></li>
-							<li><a class="dropdown-item <?php echo $sort == 'date_desc' ? 'active' : '' ?>" href="?sort=date_desc">Decending</a></li>
+							<li><a class="dropdown-item <?php echo $sort == 'date_desc' ? 'active' : '' ?>" href="?sort=date_desc">Newest</a></li>
+							<li><a class="dropdown-item <?php echo $sort == 'date_asc' ? 'active' : '' ?>" href="?sort=date_asc">Oldest</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -275,6 +248,7 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 					$body = $row['blogpost_body'];
 					$body_length = $row['body_length'];
 					$date = $row['last_updated'];
+					$num_comments = $row['num_comments'];
 
 				?>
 					<!-- onclick event to redirect user to blogpost page -->
@@ -299,8 +273,8 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 									<div class="d-flex justify-content-between align-items-center">
 										<p class="card-text mb-0"><small class="text-muted">Last updated <?php echo $date ?></small></p>
 										<!-- Only show update and delete buttons if user is admin -->
-										<?php if ($is_admin) : ?>
-											<div>
+										<div>
+											<?php if ($is_admin) : ?>
 												<a class="btn btn-outline-primary" href="update_blogpost.php?update_id=<?php echo $id ?>">
 													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
 														<path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
@@ -311,8 +285,14 @@ $select_all_results = mysqli_query($dbc, $select_all_query);
 														<path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
 													</svg>
 												</a>
-											</div>
-										<?php endif; ?>
+											<?php endif; ?>
+											<a class="btn btn-outline-secondary" href="view_blogpost.php?blogpost_id=<?php echo $id ?>#comments">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chat" viewBox="0 0 18 16">
+													<path stroke="null" id="svg_1" d="m3.36316,11.48857a1.0558,1.01196 0 0 1 0.30302,0.81058a11.58216,11.1012 0 0 1 -0.42021,2.02392c1.47285,-0.32686 2.37239,-0.70534 2.78099,-0.90368a1.0558,1.01196 0 0 1 0.74962,-0.07489a8.50978,8.15639 0 0 0 2.20557,0.27525c4.21899,0 7.39062,-2.84057 7.39062,-6.07176c0,-3.23017 -3.17163,-6.07176 -7.39062,-6.07176s-7.39062,2.84158 -7.39062,6.07176c0,1.48556 0.65143,2.86385 1.77164,3.94057zm-0.52051,3.9517a22.89193,21.94131 0 0 1 -0.75279,0.13054c-0.21116,0.03238 -0.37164,-0.1781 -0.28823,-0.36633a10.22018,9.79577 0 0 0 0.25762,-0.64462l0.00317,-0.01012c0.26184,-0.72861 0.47511,-1.56651 0.55324,-2.34673c-1.29547,-1.24471 -2.07993,-2.87397 -2.07993,-4.65501c0,-3.91224 3.78189,-7.08372 8.44643,-7.08372s8.44643,3.17148 8.44643,7.08372s-3.78189,7.08372 -8.44643,7.08372a9.56558,9.16835 0 0 1 -2.47797,-0.30966c-0.54902,0.26615 -1.73046,0.75087 -3.66153,1.11822z" />
+													<text xml:space="preserve" text-anchor="middle" dominate-baseline="middle" font-size="8" stroke-width="0" fill="currentColor" id="svg_3" y="63%" x="48%" stroke="null"><?php echo $num_comments ?></text>
+												</svg>
+											</a>
+										</div>
 									</div>
 								</div>
 							</div>

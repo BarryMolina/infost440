@@ -16,10 +16,10 @@ $notifications = array();
 $blogpost_found = false;
 
 // Get login status and set user id
-$user_logged_in = isset($_SESSION['user_id']);
-$current_user_id = $user_logged_in ? mysqli_real_escape_string($dbc, trim($_SESSION['user_id'])) : '';
-// Check if user is admin
-$is_admin = $current_user_id == 1;
+// $user_logged_in = isset($_SESSION['user_id']);
+// $current_user_id = $logged_in ? mysqli_real_escape_string($dbc, trim($_SESSION['user_id'])) : '';
+// // Check if user is admin
+// $is_admin = $current_user_id == 1;
 
 // Check if blogpost id was provided
 if (isset($_GET['blogpost_id'])) {
@@ -29,7 +29,7 @@ if (isset($_GET['blogpost_id'])) {
 	if (isset($_GET['delete_comment_id'])) {
 		$delete_id = mysqli_real_escape_string($dbc, trim($_GET['delete_comment_id']));
 		$comment_author_id = get_comment_author($delete_id);
-		// Make sure deletion is authorized
+		// Only comment author or admin can delete comment
 		if ($comment_author_id == $current_user_id || $is_admin) {
 			$delete_query = "DELETE from comments WHERE comment_id = $delete_id";
 			$delete_results = mysqli_query($dbc, $delete_query);
@@ -48,6 +48,7 @@ if (isset($_GET['blogpost_id'])) {
 			// Update existing comment
 			$update_comment_id = mysqli_real_escape_string($dbc, trim($_GET['update_comment_id']));
 			$comment_author_id = get_comment_author($update_comment_id);
+			// Only comment author or admin can update comment
 			if ($comment_author_id == $current_user_id || $is_admin) {
 				if (isset($_POST['updated_comment_body']) && ($update_comment_body = trim($_POST['updated_comment_body'])) != '') {
 					$escaped_comment_body = mysqli_real_escape_string($dbc, $update_comment_body);
@@ -64,7 +65,8 @@ if (isset($_GET['blogpost_id'])) {
 			}
 		} else {
 			// Adding a new comment
-			if (isset($_POST['new_comment_body']) && ($new_comment_body = trim($_POST['new_comment_body'])) != '') {
+			// Only logged in users can add comment
+			if (isset($_POST['new_comment_body']) && ($new_comment_body = trim($_POST['new_comment_body'])) != '' && $logged_in) {
 				$escaped_comment_body = mysqli_real_escape_string($dbc, $new_comment_body);
 				$new_comment_query = "INSERT INTO comments (user_id, blogpost_id, comment_body) VALUES ($current_user_id, $blogpost_id, '$escaped_comment_body')";
 				$new_comment_result = mysqli_query($dbc, $new_comment_query);
@@ -156,7 +158,7 @@ if (isset($_GET['blogpost_id'])) {
 			// Comments
 			if ($select_comments_results && $select_comments_results->num_rows > 0) :
 			?>
-				<div class="comments">
+				<div class="comments" id="comments">
 					<?php
 					while ($row = mysqli_fetch_array($select_comments_results, MYSQLI_ASSOC)) :
 						$comment_id = $row['comment_id'];
@@ -174,7 +176,7 @@ if (isset($_GET['blogpost_id'])) {
 										<div class="d-flex justify-content-between align-items-center">
 											<p class="card-text mb-0"><small class="text-muted">Last updated <?php echo $comment_date ?></small></p>
 											<!-- Users can only update and delete their own comments unless user is admin -->
-											<?php if ($user_logged_in && $current_user_id == $comment_author_id || $is_admin) : ?>
+											<?php if ($logged_in && $current_user_id == $comment_author_id || $is_admin) : ?>
 												<div>
 													<button class="btn btn-outline-primary" onclick="updateComment(<?php echo $blogpost_id ?>, <?php echo $comment_id ?>)">
 														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -202,7 +204,7 @@ if (isset($_GET['blogpost_id'])) {
 			<?php
 			endif;
 			// Only logged in users can add a comment
-			if ($user_logged_in) :
+			if ($logged_in) :
 			?>
 				<form action="view_blogpost.php?blogpost_id=<?php echo $blogpost_id ?>" method="post">
 					<textarea class="form-control mb-3" id="new-comment-textarea" name="new_comment_body" rows="5"><?php echo isset($new_comment_body) ? $new_comment_body : '' ?></textarea>

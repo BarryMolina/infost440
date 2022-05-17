@@ -1,6 +1,7 @@
 /* Action button styles */
 .btn-outline-danger,
-.btn-outline-primary {
+.btn-outline-primary,
+.btn-outline-secondary {
 	border: none;
 	/* padding: .6rem .75rem */
 }
