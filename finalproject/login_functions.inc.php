@@ -37,7 +37,6 @@ function check_login($dbc, $email = '', $pass = '') {
 
 	// Validate the email address:
 	if (empty($email)) {
-		// $errors[] = 'You forgot to enter your email address.';
 		$errors[] = array('alert-level' => 'danger', 'message' => 'You forgot to enter your email address.');
 	} else {
 		$e = mysqli_real_escape_string($dbc, trim($email));
@@ -45,7 +44,6 @@ function check_login($dbc, $email = '', $pass = '') {
 
 	// Validate the password:
 	if (empty($pass)) {
-		// $errors[] = 'You forgot to enter your password.';
 		$errors[] = array('alert-level' => 'danger', 'message' => 'You forgot to enter your password.');
 	} else {
 		$p = mysqli_real_escape_string($dbc, trim($pass));
@@ -66,7 +64,6 @@ function check_login($dbc, $email = '', $pass = '') {
 			// Return true and the record:
 			return array(true, $row);
 		} else { // Not a match!
-			// $errors[] = 'The email address and password entered do not match those on file.';
 			$errors[] = array('alert-level' => 'danger', 'message' => 'The email address and password entered do not match those on file.');
 		}
 	} // End of empty($errors) IF.

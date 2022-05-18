@@ -1,25 +1,16 @@
 <?php
-// session_start();
 include('auth.php');
 
 $page_title = "View Blogpost";
 
-include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
-// include('update_comment.inc.php');
 
 // Array to hold errors and notifications
 $notifications = array();
 
 // Flag to determine whether to show blogpost
 $blogpost_found = false;
-
-// Get login status and set user id
-// $user_logged_in = isset($_SESSION['user_id']);
-// $current_user_id = $logged_in ? mysqli_real_escape_string($dbc, trim($_SESSION['user_id'])) : '';
-// // Check if user is admin
-// $is_admin = $current_user_id == 1;
 
 // Check if blogpost id was provided
 if (isset($_GET['blogpost_id'])) {
@@ -121,6 +112,8 @@ if (isset($_GET['blogpost_id'])) {
 		$select_comments_results = mysqli_query($dbc, $select_comments_query);
 	}
 }
+
+include('header.php');
 ?>
 <main>
 	<div class="container">
@@ -153,12 +146,11 @@ if (isset($_GET['blogpost_id'])) {
 				<p class="" style="white-space:pre-wrap"><?php echo $blogpost_body ?></p>
 			</div>
 			<h4 class="text-muted mb-3">Comments</h4>
-			<?php
-
-			// Comments
-			if ($select_comments_results && $select_comments_results->num_rows > 0) :
-			?>
-				<div class="comments" id="comments">
+			<div class="comments" id="comments">
+				<?php
+				// Comments
+				if ($select_comments_results && $select_comments_results->num_rows > 0) :
+				?>
 					<?php
 					while ($row = mysqli_fetch_array($select_comments_results, MYSQLI_ASSOC)) :
 						$comment_id = $row['comment_id'];
@@ -198,11 +190,11 @@ if (isset($_GET['blogpost_id'])) {
 					<?php
 					endwhile;
 					?>
-				</div>
-			<?php else : ?>
-				<p>No comments yet.</p>
+				<?php else : ?>
+					<p>No comments yet.</p>
+				<?php endif; ?>
+			</div>
 			<?php
-			endif;
 			// Only logged in users can add a comment
 			if ($logged_in) :
 			?>
@@ -228,7 +220,6 @@ if (isset($_GET['blogpost_id'])) {
 function get_comment_author($comment_id) {
 	global $dbc;
 	$select_author_query = "SELECT user_id as author_id FROM comments WHERE comment_id = $comment_id";
-	// echo $select_author_query;
 	$select_author_result = mysqli_query($dbc, $select_author_query);
 	if ($select_author_result) {
 		return mysqli_fetch_array($select_author_result, MYSQLI_ASSOC)['author_id'];

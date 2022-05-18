@@ -2,7 +2,6 @@
 // This page lets the user logout.
 // This version uses sessions.
 
-// session_start(); // Access the existing session.
 include('auth.php');
 
 // If no session variable exists, redirect the user:

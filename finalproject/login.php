@@ -3,7 +3,6 @@
 include('auth.php');
 
 $page_title = 'Login';
-include('header.php');
 include('functions.php');
 
 // This page processes the login form submission.
@@ -29,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if ($check) { // OK!
 
 		// Set the session data:
-		// session_start();
 		$_SESSION['user_id'] = $data['user_id'];
 		$_SESSION['first_name'] = $data['first_name'];
 
@@ -48,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 } // End of the main submit conditional.
 
+include('header.php');
 // Create the page:
-// include('login_page.inc.php');
 ?>
 <main class="container">
 	<?php
@@ -77,7 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<div class="col-md-12">
 					<button type="submit" name="submit" class="btn btn-primary">Login</button>
 				</div>
-
 			</div>
 		</fieldset>
 	</form>

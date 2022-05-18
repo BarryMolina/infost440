@@ -1,5 +1,3 @@
-<?php //session_start();
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -14,7 +12,7 @@
 
 <body>
 	<header>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+		<nav class="navbar navbar-expand-sm navbar-light bg-light mb-5">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="index.php">Barry's Blog</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,13 +24,8 @@
 						<?php if ($is_admin) : ?>
 							<li class="nav-item"><a class="nav-link" href="new_blogpost.php">New Blogpost</a></li>
 						<?php endif; ?>
-						<!-- <li class="nav-item"><a class="nav-link" href="view_users.php">View Users</a></li> -->
 						<!-- <li class="nav-item"><a class="nav-link" href="password.php">Change Password</a></li> -->
 					</ul>
-					<!-- <form class="d-flex">
-						<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-outline-success" type="submit">Search</button>
-					</form> -->
 					<?php // Create a login/logout link:
 					if ((isset($_SESSION['user_id'])) && (basename($_SERVER['PHP_SELF']) != 'logout.php')) {
 						$user_first_name = $_SESSION['first_name'];

@@ -3,7 +3,6 @@
 
 $page_title = 'Register';
 include('auth.php');
-include('header.php');
 include('functions.php');
 
 // Initialize form values
@@ -69,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			if ($check) { // OK!
 
 				// Set the session data:
-				// session_start();
 				$_SESSION['user_id'] = $data['user_id'];
 				$_SESSION['first_name'] = $data['first_name'];
 
@@ -98,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	mysqli_close($dbc); // Close the database connection.
 
 } // End of the main Submit conditional.
+include('header.php');
 ?>
 <main class="container">
 	<?php
@@ -136,11 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				<div class="col-md-12">
 					<button type="submit" name="submit" class="btn btn-primary">Register</button>
 				</div>
-
 			</div>
 		</fieldset>
 	</form>
-
-
 </main>
 <?php include('footer.php'); ?>

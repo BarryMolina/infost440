@@ -1,5 +1,4 @@
 <?php
-// session_start();
 include('auth.php');
 // Redirect if user not logged in
 if (!$is_admin) {
@@ -7,7 +6,6 @@ if (!$is_admin) {
 	die();
 }
 $page_title = 'Update Blogpost';
-include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
 
@@ -77,8 +75,9 @@ if (isset($_GET['update_id'])) {
 		}
 	}
 }
-?>
 
+include('header.php');
+?>
 <main>
 	<div class="container" id="blogposts">
 		<?php

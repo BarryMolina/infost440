@@ -7,7 +7,6 @@ if (!$is_admin) {
 	die();
 }
 $page_title = 'New Blogpost';
-include('header.php');
 include('functions.php');
 include('mysqli_connect.php');
 
@@ -32,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$escaped_title = mysqli_real_escape_string($dbc, $blogpost_title);
 		$escaped_body = mysqli_real_escape_string($dbc, $blogpost_body);
 		$new_blogpost_query = "INSERT INTO blogposts (user_id, blogpost_title, blogpost_body) VALUES ($current_user_id, '$escaped_title', '$escaped_body')";
-		echo $new_blogpost_query;
 		$new_blogpost_result = mysqli_query($dbc, $new_blogpost_query);
 		$insert_success = $new_blogpost_result ? 1 : 0;
 		header("Location: index.php?blogpost_inserted=$insert_success");
@@ -40,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 }
 
+include('header.php');
 ?>
 <main>
 	<div class="container">
